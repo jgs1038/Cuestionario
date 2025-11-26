@@ -424,6 +424,13 @@ function App() {
 
   const loadFile = async (filename, randomize = false) => {
     setLoading(true);
+
+    // Si se selecciona modo aleatorio, activar ambos sliders
+    if (randomize) {
+      setRandomizeQuestions(true);
+      setRandomizeAnswers(true);
+    }
+
     const content = await fetchQuestionnaireContent(filename);
     if (content) {
       let parsedQuestions = parseMarkdownQuestions(content);
@@ -754,10 +761,10 @@ function App() {
       {view === 'home' ? (
         <div className="relative z-10 w-full max-w-4xl px-4 animate-fade-in">
           <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 text-center`}>
-            <h1 className={`text-4xl md:text-6xl font-bold ${theme.text} mb-6 ${theme.shadow} tracking-tight`}>
+            <h1 className={`text-4xl md:text-6xl font-bold ${theme.text} mb-4 ${theme.shadow} tracking-tight`}>
               Cuestionarios
             </h1>
-            <p className={`text-xl ${theme.textMuted} mb-12 max-w-2xl mx-auto`}>
+            <p className={`text-lg ${theme.textMuted} mb-8 max-w-2xl mx-auto`}>
               Selecciona un cuestionario para comenzar a practicar.
             </p>
 
