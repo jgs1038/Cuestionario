@@ -250,4 +250,3 @@ class B extends A {
 - ☑ a. Reutilizar clases, sin modificar las superclases.
 - ☐ b. Tener que editar las superclases para poder habilitar la herencia.
 - ☐ c. Copiar y pegar manualmente el código de las superclases en las subclases.
-```
