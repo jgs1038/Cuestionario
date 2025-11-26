@@ -317,19 +317,19 @@ function App() {
     setAvailableFiles(files);
   };
 
-  const loadFile = async (filename) => {
+  const loadFile = async (filename, randomize = false) => {
     setLoading(true);
     const content = await fetchQuestionnaireContent(filename);
     if (content) {
       let parsedQuestions = parseMarkdownQuestions(content);
       if (parsedQuestions.length > 0) {
-        // Randomize questions if enabled
-        if (randomizeQuestions) {
+        // Randomize questions if enabled or if randomize parameter is true
+        if (randomizeQuestions || randomize) {
           parsedQuestions = shuffleArray(parsedQuestions);
         }
 
-        // Randomize answers if enabled
-        if (randomizeAnswers) {
+        // Randomize answers if enabled or if randomize parameter is true
+        if (randomizeAnswers || randomize) {
           parsedQuestions = parsedQuestions.map(q => {
             const indices = q.options.map((_, i) => i);
             const shuffledIndices = shuffleArray(indices);
@@ -669,23 +669,56 @@ function App() {
                   </div>
                 )}
                 {availableFiles.map((file, index) => (
-                  <MagneticButton
+                  <div
                     key={index}
-                    onClick={() => loadFile(file)}
-                    className="p-6 w-full text-left group h-full flex flex-col justify-between"
-                    theme={theme}
+                    className={`relative rounded-xl border ${theme.border} ${theme.glass} backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-${theme.accent}-400/30 group`}
                   >
-                    <div>
+                    <div className="p-6">
                       <div className="flex items-center justify-between mb-2">
                         <span className={`text-xs font-bold px-2 py-1 rounded ${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}`}>
                           MD
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${theme.textMuted} group-hover:${theme.accent}-400 transition-colors`}><path d="M9 18l6-6-6-6" /></svg>
                       </div>
-                      <div className="font-bold text-lg mb-1 truncate" title={file}>{file.replace('.md', '').replace(/_/g, ' ')}</div>
-                      <div className={`text-xs ${theme.textMuted}`}>Cuestionario de práctica</div>
+                      <div className={`font-bold text-lg mb-1 truncate ${theme.text}`} title={file}>
+                        {file.replace('.md', '').replace(/_/g, ' ')}
+                      </div>
+                      <div className={`text-xs ${theme.textMuted} mb-4`}>Cuestionario de práctica</div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-3 mt-4">
+                        <button
+                          onClick={() => loadFile(file, false)}
+                          className={`group/btn relative flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-all duration-300 ${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text} hover:border-${theme.accent}-400/50`}
+                          title="Iniciar cuestionario normal"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover/btn:scale-110">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                          {/* Tooltip */}
+                          <span className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-xs font-medium ${theme.text} ${theme.glass} rounded-lg border ${theme.border} whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none`}>
+                            Normal
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => loadFile(file, true)}
+                          className={`group/btn relative flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-all duration-300 ${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text} hover:border-${theme.accent}-400/50`}
+                          title="Iniciar cuestionario aleatorio"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover/btn:rotate-12">
+                            <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+                            <path d="M2 6h1.4c1.3 0 2.5.6 3.3 1.7l6.1 8.6c.7 1.1 2 1.7 3.3 1.7H22"/>
+                            <path d="M18 2l4 4-4 4"/>
+                            <path d="M18 14l4 4-4 4"/>
+                          </svg>
+                          {/* Tooltip */}
+                          <span className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-xs font-medium ${theme.text} ${theme.glass} rounded-lg border ${theme.border} whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none`}>
+                            Aleatorio
+                          </span>
+                        </button>
+                      </div>
                     </div>
-                  </MagneticButton>
+                  </div>
                 ))}
               </div>
             )}
@@ -770,7 +803,7 @@ function App() {
                 )}
 
                 {/* Question */}
-                <h2 className={`text-2xl md:text-3xl font-bold ${theme.text} mb-10 leading-relaxed ${theme.shadow}`}>
+                <h2 className={`font-bold ${theme.text} mb-10 leading-relaxed ${theme.shadow}`} style={{ fontSize: `${1.5 * fontScale}rem` }}>
                   <FormattedText text={questions[currentQuestion].question} theme={theme} />
                 </h2>
 
@@ -809,14 +842,14 @@ function App() {
                         theme={theme}
                         className="p-5 w-full text-left group"
                       >
-                        <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-5 text-sm font-bold transition-all duration-300 ${status === 'active' ? `${theme.activeBg} ${theme.activeText} ${theme.activeBorder}` :
+                        <span className={`flex-shrink-0 flex items-center justify-center rounded-lg border mr-5 font-bold transition-all duration-300 ${status === 'active' ? `${theme.activeBg} ${theme.activeText} ${theme.activeBorder}` :
                           status === 'correct' ? 'bg-green-500 text-white border-green-400' :
                             status === 'incorrect' ? 'bg-red-500 text-white border-red-400' :
                               `${theme.glass} ${theme.border} ${theme.textMuted} group-hover:${theme.text}`
-                          }`}>
+                          }`} style={{ width: `${2 * fontScale}rem`, height: `${2 * fontScale}rem`, fontSize: `${0.875 * fontScale}rem` }}>
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <span className="text-lg leading-snug">
+                        <span className="leading-snug" style={{ fontSize: `${1.125 * fontScale}rem` }}>
                           <FormattedText text={option} theme={theme} />
                         </span>
 
