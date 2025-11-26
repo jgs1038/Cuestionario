@@ -4,4 +4,6 @@ services:
     build: .
     ports:
       - "8080:80"
+    volumes:
+      - ./questions:/usr/share/nginx/html/questions
     container_name: examen_java_poo
