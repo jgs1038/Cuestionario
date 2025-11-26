@@ -283,7 +283,9 @@ function App() {
   const [strictMode, setStrictMode] = useState(true);
   const [feedbackRevealed, setFeedbackRevealed] = useState({});
   const [currentTheme, setCurrentTheme] = useState('default');
-  const [fontSize, setFontSize] = useState(100); // Percentage: 100 = normal
+  const [fontScale, setFontScale] = useState(1); // Scale: 1 = normal
+  const [randomizeQuestions, setRandomizeQuestions] = useState(false);
+  const [randomizeAnswers, setRandomizeAnswers] = useState(false);
 
   // File management
   const [availableFiles, setAvailableFiles] = useState([]);
@@ -300,6 +302,16 @@ function App() {
     loadFileList();
   }, []);
 
+  // Shuffle function (Fisher-Yates)
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
   const loadFileList = async () => {
     const files = await fetchQuestionnaireList();
     setAvailableFiles(files);
@@ -309,8 +321,27 @@ function App() {
     setLoading(true);
     const content = await fetchQuestionnaireContent(filename);
     if (content) {
-      const parsedQuestions = parseMarkdownQuestions(content);
+      let parsedQuestions = parseMarkdownQuestions(content);
       if (parsedQuestions.length > 0) {
+        // Randomize questions if enabled
+        if (randomizeQuestions) {
+          parsedQuestions = shuffleArray(parsedQuestions);
+        }
+
+        // Randomize answers if enabled
+        if (randomizeAnswers) {
+          parsedQuestions = parsedQuestions.map(q => {
+            const indices = q.options.map((_, i) => i);
+            const shuffledIndices = shuffleArray(indices);
+
+            return {
+              ...q,
+              options: shuffledIndices.map(i => q.options[i]),
+              correctAnswer: shuffledIndices.indexOf(q.correctAnswer)
+            };
+          });
+        }
+
         setQuestions(parsedQuestions);
         setCurrentFileName(filename);
         setView('quiz');
@@ -417,7 +448,13 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen ${theme.bg} flex items-center justify-center p-4 font-sans relative overflow-hidden transition-colors duration-700`} style={{ fontSize: `${fontSize}%` }}>
+    <div
+      className={`min-h-screen ${theme.bg} flex items-center justify-center p-4 font-sans relative overflow-hidden transition-colors duration-700`}
+      style={{
+        '--font-scale': fontScale,
+        fontSize: `calc(1rem * var(--font-scale))`
+      }}
+    >
 
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -481,46 +518,46 @@ function App() {
               <div className={`${theme.glass} p-4 rounded-2xl`}>
                 <div className="flex items-center justify-between mb-4">
                   <button
-                    onClick={() => setFontSize(Math.max(75, fontSize - 10))}
-                    disabled={fontSize <= 75}
-                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontSize <= 75 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
+                    onClick={() => setFontScale(Math.max(0.75, fontScale - 0.1))}
+                    disabled={fontScale <= 0.75}
+                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontScale <= 0.75 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
                   >
                     −
                   </button>
                   <div className="flex flex-col items-center">
-                    <span className={`text-2xl font-bold ${theme.text}`}>{fontSize}%</span>
+                    <span className={`text-2xl font-bold ${theme.text}`}>{Math.round(fontScale * 100)}%</span>
                     <span className={`text-xs ${theme.textMuted} mt-1`}>Tamaño actual</span>
                   </div>
                   <button
-                    onClick={() => setFontSize(Math.min(150, fontSize + 10))}
-                    disabled={fontSize >= 150}
-                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontSize >= 150 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
+                    onClick={() => setFontScale(Math.min(1.5, fontScale + 0.1))}
+                    disabled={fontScale >= 1.5}
+                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontScale >= 1.5 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
                   >
                     +
                   </button>
                 </div>
                 <div className="flex justify-center gap-2">
                   <button
-                    onClick={() => setFontSize(75)}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 75 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                    onClick={() => setFontScale(0.75)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontScale === 0.75 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
                   >
                     Pequeño
                   </button>
                   <button
-                    onClick={() => setFontSize(100)}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 100 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                    onClick={() => setFontScale(1)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontScale === 1 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
                   >
                     Normal
                   </button>
                   <button
-                    onClick={() => setFontSize(125)}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 125 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                    onClick={() => setFontScale(1.25)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontScale === 1.25 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
                   >
                     Grande
                   </button>
                   <button
-                    onClick={() => setFontSize(150)}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 150 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                    onClick={() => setFontScale(1.5)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontScale === 1.5 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
                   >
                     Muy Grande
                   </button>
@@ -565,6 +602,38 @@ function App() {
                     </button>
                   </div>
                 )}
+
+                <div className={`${theme.glass} p-4 rounded-2xl flex items-center justify-between group ${theme.glassHover} transition-colors`}>
+                  <div>
+                    <div className={`font-semibold ${theme.text}`}>Aleatorizar Preguntas</div>
+                    <div className={`text-xs ${theme.textMuted} mt-1`}>Orden aleatorio de preguntas</div>
+                  </div>
+                  <button
+                    onClick={() => setRandomizeQuestions(!randomizeQuestions)}
+                    className="relative w-12 h-6 rounded-full transition-colors duration-300"
+                    style={{
+                      backgroundColor: randomizeQuestions ? theme.accentHex : 'rgba(107, 114, 128, 0.3)'
+                    }}
+                  >
+                    <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${randomizeQuestions ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </button>
+                </div>
+
+                <div className={`${theme.glass} p-4 rounded-2xl flex items-center justify-between group ${theme.glassHover} transition-colors`}>
+                  <div>
+                    <div className={`font-semibold ${theme.text}`}>Aleatorizar Respuestas</div>
+                    <div className={`text-xs ${theme.textMuted} mt-1`}>Orden aleatorio de opciones</div>
+                  </div>
+                  <button
+                    onClick={() => setRandomizeAnswers(!randomizeAnswers)}
+                    className="relative w-12 h-6 rounded-full transition-colors duration-300"
+                    style={{
+                      backgroundColor: randomizeAnswers ? theme.accentHex : 'rgba(107, 114, 128, 0.3)'
+                    }}
+                  >
+                    <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${randomizeAnswers ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </button>
+                </div>
               </div>
             </div>
 
