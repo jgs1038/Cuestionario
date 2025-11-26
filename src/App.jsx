@@ -316,20 +316,11 @@ const IconButton = ({ children, onClick, className = "", theme, title }) => {
         onMouseLeave={handleMouseLeave}
         title={title}
         style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${isHovering ? 1.1 : 1})`,
+          transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${isHovering ? 1.15 : 1})`,
           transition: isHovering ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         }}
-        className={`relative rounded-full p-3 backdrop-blur-sm border ${theme.border} transition-all duration-300 ease-out overflow-hidden ${theme.glass} ${theme.text} opacity-60 hover:opacity-100 z-10 ${className}`}
+        className={`relative p-2 transition-all duration-300 ease-out ${theme.text} opacity-70 hover:opacity-100 z-10 ${className}`}
       >
-        {/* Spotlight Gradient */}
-        <div
-          className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 rounded-full"
-          style={{
-            opacity,
-            background: `radial-gradient(100px circle at ${spotlightPos.x}px ${spotlightPos.y}px, ${theme.id === 'white' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.15)'}, transparent 40%)`,
-          }}
-        />
-
         {/* Icon Content */}
         <div className="relative z-10">
           {children}
@@ -370,12 +361,12 @@ const QuizCard = ({ file, theme, onLoadNormal, onLoadRandom }) => {
         </div>
 
         {/* Quiz Title */}
-        <div className={`font-bold text-lg mb-1 truncate ${theme.text}`} title={file}>
+        <div className={`font-bold text-xl mb-2 ${theme.text} leading-tight`} title={file}>
           {file.replace('.md', '').replace(/_/g, ' ')}
         </div>
 
         {/* Quiz Description */}
-        <div className={`text-xs ${theme.textMuted}`}>Cuestionario de práctica</div>
+        <div className={`text-sm ${theme.textMuted}`}>Cuestionario de práctica</div>
       </div>
     </div>
   );
