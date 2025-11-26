@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import questionsData from './questions.json';
+// import questionsData from './questions.json'; // Removed default JSON logic
 import { parseMarkdownQuestions } from './utils/markdownParser';
 import { fetchQuestionnaireList, fetchQuestionnaireContent } from './utils/fileFetcher';
 import Prism from 'prismjs';
@@ -124,7 +124,8 @@ const FormattedText = ({ text, theme, className = "" }) => {
           let language = 'javascript'; // Default language
 
           // Check for language identifier (e.g., "java\n")
-          const firstLineMatch = codeContent.match(/^\s*([a-zA-Z0-9]+)\n/);
+          // FIX: Handle CRLF and loose whitespace
+          const firstLineMatch = codeContent.match(/^\s*([a-zA-Z0-9]+)\r?\n/);
           if (firstLineMatch) {
             language = firstLineMatch[1].toLowerCase();
             codeContent = codeContent.substring(firstLineMatch[0].length);
@@ -261,7 +262,8 @@ const MagneticButton = ({ children, onClick, className = "", disabled = false, a
 // --- Main App ---
 
 function App() {
-  const [questions, setQuestions] = useState(questionsData);
+  const [view, setView] = useState('home'); // 'home', 'quiz'
+  const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -302,6 +304,7 @@ function App() {
       if (parsedQuestions.length > 0) {
         setQuestions(parsedQuestions);
         setCurrentFileName(filename);
+        setView('quiz');
         restartQuiz();
         setIsMenuOpen(false);
       } else {
@@ -371,6 +374,14 @@ function App() {
     setShowGrid(false);
   };
 
+  const goHome = () => {
+    setView('home');
+    setQuestions([]);
+    setScore(0);
+    setShowScore(false);
+    setIsMenuOpen(false);
+  };
+
   const getGridButtonStyle = (index) => {
     const isCurrent = currentQuestion === index;
     const isAnswered = userAnswers[index] !== undefined;
@@ -406,16 +417,18 @@ function App() {
       </div>
 
       {/* Menu Button */}
-      <button
-        onClick={() => setIsMenuOpen(true)}
-        className={`absolute top-6 right-6 z-20 p-3 rounded-full ${theme.glass} ${theme.border} backdrop-blur-md transition-all duration-300 hover:scale-110 hover:shadow-lg group`}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${theme.textMuted} group-hover:${theme.text}`}>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+      {view === 'quiz' && (
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className={`absolute top-6 right-6 z-20 p-3 rounded-full ${theme.glass} ${theme.border} backdrop-blur-md transition-all duration-300 hover:scale-110 hover:shadow-lg group`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${theme.textMuted} group-hover:${theme.text}`}>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      )}
 
       {/* Menu Modal */}
       {isMenuOpen && (
@@ -494,233 +507,245 @@ function App() {
             </div>
 
             <div className="mb-8">
-              <h3 className={`text-xs font-bold ${theme.textMuted} uppercase tracking-widest mb-6 ml-1`}>Cuestionarios</h3>
-              {loading ? (
-                <div className={`flex items-center space-x-3 text-${theme.accent}-400 p-2`}>
-                  <div className={`w-5 h-5 border-2 border-${theme.accent}-400 border-t-transparent rounded-full animate-spin`}></div>
-                  <span className="text-sm font-medium">Cargando...</span>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <MagneticButton
-                    onClick={() => {
-                      setQuestions(questionsData);
-                      setCurrentFileName('Default (JSON)');
-                      restartQuiz();
-                      setIsMenuOpen(false);
-                    }}
-                    active={currentFileName === 'Default (JSON)'}
-                    className="p-4 w-full text-left"
-                    theme={theme}
-                  >
-                    <div>
-                      <div className="font-semibold">Default (JSON)</div>
-                      <div className={`text-xs ${theme.textMuted} mt-1`}>Preguntas integradas</div>
-                    </div>
-                  </MagneticButton>
-
-                  {availableFiles.map((file, index) => (
-                    <MagneticButton
-                      key={index}
-                      onClick={() => loadFile(file)}
-                      active={currentFileName === file}
-                      className="p-4 w-full text-left"
-                      theme={theme}
-                    >
-                      <div>
-                        <div className="font-semibold">{file}</div>
-                        <div className={`text-xs ${theme.textMuted} mt-1`}>Archivo Markdown</div>
-                      </div>
-                    </MagneticButton>
-                  ))}
-                </div>
-              )}
+              <MagneticButton onClick={goHome} className="p-4 w-full justify-center" theme={theme}>
+                <span className="font-bold">Volver al Inicio</span>
+              </MagneticButton>
             </div>
           </div>
         </div>
       )}
 
-      {/* Main Card */}
-      <div className="w-full max-w-4xl relative z-10 px-4">
-        <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 transition-all duration-500`}>
-          {showScore ? (
-            <div className="text-center py-12 animate-fade-in">
-              <div className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-tr from-${theme.accent}-400 to-purple-500 p-[1px] shadow-lg`}>
-                <div className={`w-full h-full rounded-full ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} backdrop-blur-xl flex items-center justify-center`}>
-                  <span className={`text-5xl font-bold ${theme.text}`}>{Math.round((score / questions.length) * 100)}%</span>
-                </div>
-              </div>
+      {view === 'home' ? (
+        <div className="relative z-10 w-full max-w-4xl px-4 animate-fade-in">
+          <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 text-center`}>
+            <h1 className={`text-4xl md:text-6xl font-bold ${theme.text} mb-6 ${theme.shadow} tracking-tight`}>
+              Cuestionarios
+            </h1>
+            <p className={`text-xl ${theme.textMuted} mb-12 max-w-2xl mx-auto`}>
+              Selecciona un cuestionario para comenzar a practicar.
+            </p>
 
-              <h2 className={`text-4xl font-bold ${theme.text} mb-2 ${theme.shadow}`}>¡Completado!</h2>
-              <p className={`${theme.textMuted} mb-10 text-lg`}>Has finalizado el cuestionario</p>
-
-              <div className="flex justify-center items-end gap-3 mb-12">
-                <span className={`text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-${theme.accent}-400 to-purple-400`}>{score}</span>
-                <span className={`text-3xl ${theme.textMuted} font-medium mb-3`}>/ {questions.length}</span>
+            {loading ? (
+              <div className={`flex justify-center items-center space-x-3 text-${theme.accent}-400 p-8`}>
+                <div className={`w-8 h-8 border-4 border-${theme.accent}-400 border-t-transparent rounded-full animate-spin`}></div>
+                <span className="text-lg font-medium">Cargando cuestionarios...</span>
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <MagneticButton onClick={startReview} className="px-8 py-4 justify-center" theme={theme}>
-                  <span className="font-bold text-lg">Revisar Respuestas</span>
-                </MagneticButton>
-                <MagneticButton onClick={restartQuiz} className="px-8 py-4 justify-center" theme={theme}>
-                  <span className="font-bold text-lg">Intentar de Nuevo</span>
-                </MagneticButton>
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* Header */}
-              <div className="mb-10 flex justify-between items-start">
-                <div className="flex flex-col gap-2">
-                  <button
-                    onClick={() => setShowGrid(!showGrid)}
-                    className={`flex items-center gap-2 text-sm font-bold text-${theme.accent}-400 tracking-widest uppercase hover:text-${theme.accent}-300 transition-colors`}
-                  >
-                    <span className={theme.text}>
-                      Pregunta {currentQuestion + 1} / {questions.length}
-                    </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${showGrid ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
-                  </button>
-                  <div className="flex gap-2">
-                    {isReviewing && <span className="text-xs font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded-md">Modo Revisión</span>}
-                    {instantFeedback && !isReviewing && <span className="text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded-md">Corrección Inmediata</span>}
-                  </div>
-                </div>
-                {!isReviewing && !instantFeedback && (
-                  <div className={`${theme.glass} px-4 py-2 rounded-xl font-bold ${theme.textMuted} shadow-inner`}>
-                    Puntos: {score}
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                {availableFiles.length === 0 && (
+                  <div className={`col-span-full text-center ${theme.textMuted} p-8`}>
+                    No se encontraron cuestionarios en la carpeta /questions
                   </div>
                 )}
+                {availableFiles.map((file, index) => (
+                  <MagneticButton
+                    key={index}
+                    onClick={() => loadFile(file)}
+                    className="p-6 w-full text-left group h-full flex flex-col justify-between"
+                    theme={theme}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`text-xs font-bold px-2 py-1 rounded ${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}`}>
+                          MD
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${theme.textMuted} group-hover:${theme.accent}-400 transition-colors`}><path d="M9 18l6-6-6-6" /></svg>
+                      </div>
+                      <div className="font-bold text-lg mb-1 truncate" title={file}>{file.replace('.md', '').replace(/_/g, ' ')}</div>
+                      <div className={`text-xs ${theme.textMuted}`}>Cuestionario de práctica</div>
+                    </div>
+                  </MagneticButton>
+                ))}
               </div>
-
-              {/* Grid */}
-              {showGrid && (
-                <div className={`mb-8 p-6 ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} rounded-2xl border ${theme.border} animate-fade-in max-h-60 overflow-y-auto custom-scrollbar`}>
-                  <div className="flex flex-wrap gap-3">
-                    {questions.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setCurrentQuestion(index);
-                          setShowGrid(false);
-                        }}
-                        className={getGridButtonStyle(index)}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
+            )}
+          </div>
+        </div>
+      ) : (
+        /* Main Card */
+        <div className="w-full max-w-4xl relative z-10 px-4">
+          <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 transition-all duration-500`}>
+            {showScore ? (
+              <div className="text-center py-12 animate-fade-in">
+                <div className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-tr from-${theme.accent}-400 to-purple-500 p-[1px] shadow-lg`}>
+                  <div className={`w-full h-full rounded-full ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} backdrop-blur-xl flex items-center justify-center`}>
+                    <span className={`text-5xl font-bold ${theme.text}`}>{Math.round((score / questions.length) * 100)}%</span>
                   </div>
                 </div>
-              )}
 
-              {/* Question */}
-              <h2 className={`text-2xl md:text-3xl font-bold ${theme.text} mb-10 leading-relaxed ${theme.shadow}`}>
-                <FormattedText text={questions[currentQuestion].question} theme={theme} />
-              </h2>
+                <h2 className={`text-4xl font-bold ${theme.text} mb-2 ${theme.shadow}`}>¡Completado!</h2>
+                <p className={`${theme.textMuted} mb-10 text-lg`}>Has finalizado el cuestionario</p>
 
-              {/* Progress Bar */}
-              {!isReviewing && !showGrid && (
-                <div className={`w-full ${theme.glass} h-1 mb-12 rounded-full overflow-hidden`}>
-                  <div className={`bg-gradient-to-r from-${theme.accent}-400 to-purple-500 h-full transition-all duration-700 ease-out shadow-lg`} style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}></div>
+                <div className="flex justify-center items-end gap-3 mb-12">
+                  <span className={`text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-${theme.accent}-400 to-purple-400`}>{score}</span>
+                  <span className={`text-3xl ${theme.textMuted} font-medium mb-3`}>/ {questions.length}</span>
                 </div>
-              )}
 
-              {/* Options */}
-              <div className="space-y-4 mb-12">
-                {questions[currentQuestion].options.map((option, index) => {
-                  const isFeedbackShown = isReviewing || feedbackRevealed[currentQuestion];
-                  const userSelected = userAnswers[currentQuestion];
-                  const isCorrect = index === questions[currentQuestion].correctAnswer;
-                  const isSelected = userSelected === index;
-
-                  // Determine status for styling
-                  let status = 'default';
-                  if (isFeedbackShown && userSelected !== undefined) {
-                    if (isCorrect) status = 'correct';
-                    else if (isSelected) status = 'incorrect';
-                  } else if (isSelected) {
-                    status = 'active';
-                  }
-
-                  return (
-                    <MagneticButton
-                      key={index}
-                      onClick={() => handleAnswerOptionClick(index)}
-                      disabled={isReviewing || (isFeedbackShown && strictMode)}
-                      active={status === 'active'}
-                      correct={status === 'correct'}
-                      incorrect={status === 'incorrect'}
-                      theme={theme}
-                      className="p-5 w-full text-left group"
+                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <MagneticButton onClick={startReview} className="px-8 py-4 justify-center" theme={theme}>
+                    <span className="font-bold text-lg">Revisar Respuestas</span>
+                  </MagneticButton>
+                  <MagneticButton onClick={restartQuiz} className="px-8 py-4 justify-center" theme={theme}>
+                    <span className="font-bold text-lg">Intentar de Nuevo</span>
+                  </MagneticButton>
+                  <MagneticButton onClick={goHome} className="px-8 py-4 justify-center" theme={theme}>
+                    <span className="font-bold text-lg">Volver al Inicio</span>
+                  </MagneticButton>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Header */}
+                <div className="mb-10 flex justify-between items-start">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={() => setShowGrid(!showGrid)}
+                      className={`flex items-center gap-2 text-sm font-bold text-${theme.accent}-400 tracking-widest uppercase hover:text-${theme.accent}-300 transition-colors`}
                     >
-                      <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-5 text-sm font-bold transition-all duration-300 ${status === 'active' ? `${theme.activeBg} ${theme.activeText} ${theme.activeBorder}` :
+                      <span className={theme.text}>
+                        Pregunta {currentQuestion + 1} / {questions.length}
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${showGrid ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                    </button>
+                    <div className="flex gap-2">
+                      {isReviewing && <span className="text-xs font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded-md">Modo Revisión</span>}
+                      {instantFeedback && !isReviewing && <span className="text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded-md">Corrección Inmediata</span>}
+                    </div>
+                  </div>
+                  {!isReviewing && !instantFeedback && (
+                    <div className={`${theme.glass} px-4 py-2 rounded-xl font-bold ${theme.textMuted} shadow-inner`}>
+                      Puntos: {score}
+                    </div>
+                  )}
+                </div>
+
+                {/* Grid */}
+                {showGrid && (
+                  <div className={`mb-8 p-6 ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} rounded-2xl border ${theme.border} animate-fade-in max-h-60 overflow-y-auto custom-scrollbar`}>
+                    <div className="flex flex-wrap gap-3">
+                      {questions.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setCurrentQuestion(index);
+                            setShowGrid(false);
+                          }}
+                          className={getGridButtonStyle(index)}
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Question */}
+                <h2 className={`text-2xl md:text-3xl font-bold ${theme.text} mb-10 leading-relaxed ${theme.shadow}`}>
+                  <FormattedText text={questions[currentQuestion].question} theme={theme} />
+                </h2>
+
+                {/* Progress Bar */}
+                {!isReviewing && !showGrid && (
+                  <div className={`w-full ${theme.glass} h-1 mb-12 rounded-full overflow-hidden`}>
+                    <div className={`bg-gradient-to-r from-${theme.accent}-400 to-purple-500 h-full transition-all duration-700 ease-out shadow-lg`} style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}></div>
+                  </div>
+                )}
+
+                {/* Options */}
+                <div className="space-y-4 mb-12">
+                  {questions[currentQuestion].options.map((option, index) => {
+                    const isFeedbackShown = isReviewing || feedbackRevealed[currentQuestion];
+                    const userSelected = userAnswers[currentQuestion];
+                    const isCorrect = index === questions[currentQuestion].correctAnswer;
+                    const isSelected = userSelected === index;
+
+                    // Determine status for styling
+                    let status = 'default';
+                    if (isFeedbackShown && userSelected !== undefined) {
+                      if (isCorrect) status = 'correct';
+                      else if (isSelected) status = 'incorrect';
+                    } else if (isSelected) {
+                      status = 'active';
+                    }
+
+                    return (
+                      <MagneticButton
+                        key={index}
+                        onClick={() => handleAnswerOptionClick(index)}
+                        disabled={isReviewing || (isFeedbackShown && strictMode)}
+                        active={status === 'active'}
+                        correct={status === 'correct'}
+                        incorrect={status === 'incorrect'}
+                        theme={theme}
+                        className="p-5 w-full text-left group"
+                      >
+                        <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-5 text-sm font-bold transition-all duration-300 ${status === 'active' ? `${theme.activeBg} ${theme.activeText} ${theme.activeBorder}` :
                           status === 'correct' ? 'bg-green-500 text-white border-green-400' :
                             status === 'incorrect' ? 'bg-red-500 text-white border-red-400' :
                               `${theme.glass} ${theme.border} ${theme.textMuted} group-hover:${theme.text}`
-                        }`}>
-                        {String.fromCharCode(65 + index)}
-                      </span>
-                      <span className="text-lg leading-snug">
-                        <FormattedText text={option} theme={theme} />
-                      </span>
+                          }`}>
+                          {String.fromCharCode(65 + index)}
+                        </span>
+                        <span className="text-lg leading-snug">
+                          <FormattedText text={option} theme={theme} />
+                        </span>
 
-                      {status === 'correct' && (
-                        <svg className="w-6 h-6 ml-auto text-green-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                      )}
-                      {status === 'incorrect' && (
-                        <svg className="w-6 h-6 ml-auto text-red-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
-                      )}
-                    </MagneticButton>
-                  );
-                })}
-              </div>
+                        {status === 'correct' && (
+                          <svg className="w-6 h-6 ml-auto text-green-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                        )}
+                        {status === 'incorrect' && (
+                          <svg className="w-6 h-6 ml-auto text-red-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                        )}
+                      </MagneticButton>
+                    );
+                  })}
+                </div>
 
-              {/* Navigation */}
-              <div className={`flex justify-between pt-8 border-t ${theme.border}`}>
-                <button
-                  onClick={handlePreviousQuestion}
-                  disabled={currentQuestion === 0}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${currentQuestion === 0 ? 'opacity-30 cursor-not-allowed' : `${theme.textMuted} hover:${theme.text} hover:bg-white/5`}`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-                  Anterior
-                </button>
-
-                {isReviewing ? (
-                  currentQuestion === questions.length - 1 ? (
-                    <MagneticButton onClick={() => setShowScore(true)} className="px-8 py-3" theme={theme}>
-                      <span className="flex items-center gap-2">
-                        Finalizar Revisión
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                      </span>
-                    </MagneticButton>
-                  ) : (
-                    <MagneticButton onClick={handleNextQuestion} className="px-8 py-3" theme={theme}>
-                      <span className="flex items-center gap-2">
-                        Siguiente
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                      </span>
-                    </MagneticButton>
-                  )
-                ) : (
-                  <MagneticButton
-                    onClick={handleNextQuestion}
-                    disabled={userAnswers[currentQuestion] === undefined}
-                    className={`px-8 py-3 ${userAnswers[currentQuestion] === undefined ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    theme={theme}
+                {/* Navigation */}
+                <div className={`flex justify-between pt-8 border-t ${theme.border}`}>
+                  <button
+                    onClick={handlePreviousQuestion}
+                    disabled={currentQuestion === 0}
+                    className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${currentQuestion === 0 ? 'opacity-30 cursor-not-allowed' : `${theme.textMuted} hover:${theme.text} hover:bg-white/5`}`}
                   >
-                    <span className="flex items-center gap-2">
-                      {currentQuestion === questions.length - 1 ? 'Ver Resultados' : 'Siguiente'}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                    </span>
-                  </MagneticButton>
-                )}
-              </div>
-            </>
-          )}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                    Anterior
+                  </button>
+
+                  {isReviewing ? (
+                    currentQuestion === questions.length - 1 ? (
+                      <MagneticButton onClick={() => setShowScore(true)} className="px-8 py-3" theme={theme}>
+                        <span className="flex items-center gap-2">
+                          Finalizar Revisión
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                        </span>
+                      </MagneticButton>
+                    ) : (
+                      <MagneticButton onClick={handleNextQuestion} className="px-8 py-3" theme={theme}>
+                        <span className="flex items-center gap-2">
+                          Siguiente
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                        </span>
+                      </MagneticButton>
+                    )
+                  ) : (
+                    <MagneticButton
+                      onClick={handleNextQuestion}
+                      disabled={userAnswers[currentQuestion] === undefined}
+                      className={`px-8 py-3 ${userAnswers[currentQuestion] === undefined ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      theme={theme}
+                    >
+                      <span className="flex items-center gap-2">
+                        {currentQuestion === questions.length - 1 ? 'Ver Resultados' : 'Siguiente'}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                      </span>
+                    </MagneticButton>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
