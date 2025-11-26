@@ -2,6 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import questionsData from './questions.json';
 import { parseMarkdownQuestions } from './utils/markdownParser';
 import { fetchQuestionnaireList, fetchQuestionnaireContent } from './utils/fileFetcher';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-c';
+import 'prismjs/components/prism-cpp';
+import 'prismjs/components/prism-csharp';
+import 'prismjs/components/prism-sql';
 
 // --- Theme Configuration ---
 const themes = {
@@ -93,27 +102,46 @@ const themes = {
 
 // --- Helper: Markdown Renderer ---
 const FormattedText = ({ text, theme, className = "" }) => {
+  const codeBlockRef = useRef(null);
+
+  useEffect(() => {
+    if (codeBlockRef.current) {
+      Prism.highlightAllUnder(codeBlockRef.current);
+    }
+  }, [text]);
+
   if (!text) return null;
 
   // 1. Split by Code Blocks (``` ... ```)
   const blockParts = text.split(/(```[\s\S]*?```)/g);
 
   return (
-    <div className={`${className} w-full`}>
+    <div className={`${className} w-full`} ref={codeBlockRef}>
       {blockParts.map((part, index) => {
         if (part.startsWith('```') && part.endsWith('```')) {
           // Render Code Block
           let codeContent = part.slice(3, -3);
+          let language = 'javascript'; // Default language
 
           // Check for language identifier (e.g., "java\n")
           const firstLineMatch = codeContent.match(/^\s*([a-zA-Z0-9]+)\n/);
           if (firstLineMatch) {
+            language = firstLineMatch[1].toLowerCase();
             codeContent = codeContent.substring(firstLineMatch[0].length);
           }
 
           return (
-            <div key={index} className={`my-4 p-4 rounded-lg overflow-x-auto font-mono text-sm leading-relaxed ${theme.codeBg} ${theme.codeText} border ${theme.border} shadow-inner w-full`}>
-              <pre className="whitespace-pre">{codeContent.trim()}</pre>
+            <div key={index} className={`my-4 rounded-lg overflow-hidden border ${theme.border} shadow-lg w-full`}>
+              <div className={`px-3 py-1 text-xs font-bold ${theme.textMuted} ${theme.glass} border-b ${theme.border}`}>
+                {language.toUpperCase()}
+              </div>
+              <div className={`p-4 overflow-x-auto`} style={{
+                backgroundColor: theme.id === 'white' ? '#f5f5f5' : '#1e1e1e'
+              }}>
+                <pre className={`language-${language} !bg-transparent !m-0 !p-0`}>
+                  <code className={`language-${language}`}>{codeContent.trim()}</code>
+                </pre>
+              </div>
             </div>
           );
         }
@@ -128,9 +156,12 @@ const FormattedText = ({ text, theme, className = "" }) => {
                 // Render Inline Code
                 const inlineContent = subPart.slice(1, -1);
                 return (
-                  <span key={subIndex} className={`font-mono text-sm px-1.5 py-0.5 rounded mx-0.5 ${theme.codeBg} ${theme.codeText} border ${theme.border} align-middle`}>
+                  <code key={subIndex} className={`font-mono text-sm px-2 py-1 rounded mx-0.5 border ${theme.border} align-middle`} style={{
+                    backgroundColor: theme.id === 'white' ? '#f0f0f0' : '#2d2d2d',
+                    color: theme.id === 'white' ? '#c7254e' : '#e06c75'
+                  }}>
                     {inlineContent}
-                  </span>
+                  </code>
                 );
               }
               // Regular Text
@@ -257,22 +288,6 @@ function App() {
   useEffect(() => {
     loadFileList();
   }, []);
-
-  useEffect(() => {
-    if (instantFeedback && strictMode) {
-      const newRevealed = { ...feedbackRevealed };
-      let changed = false;
-      Object.keys(userAnswers).forEach(key => {
-        if (!newRevealed[key]) {
-          newRevealed[key] = true;
-          changed = true;
-        }
-      });
-      if (changed) {
-        setFeedbackRevealed(newRevealed);
-      }
-    }
-  }, [instantFeedback, strictMode, userAnswers]);
 
   const loadFileList = async () => {
     const files = await fetchQuestionnaireList();
@@ -425,7 +440,11 @@ function App() {
                   <button
                     key={key}
                     onClick={() => setCurrentTheme(key)}
-                    className={`flex-1 p-3 rounded-xl border transition-all duration-300 ${currentTheme === key ? `border-${themes[key].accent}-500 bg-${themes[key].accent}-500/10` : `${theme.border} ${theme.glass}`}`}
+                    className={`flex-1 p-3 rounded-xl border transition-all duration-300 ${currentTheme === key ? '' : `${theme.border} ${theme.glass}`}`}
+                    style={currentTheme === key ? {
+                      borderColor: themes[key].accentHex,
+                      backgroundColor: `${themes[key].accentHex}1A` // 1A = 10% opacity in hex
+                    } : {}}
                   >
                     <div className={`w-6 h-6 rounded-full mx-auto mb-2 border-2 border-white/20`} style={{ background: themes[key].accentHex }}></div>
                     <div className={`text-xs font-medium text-center ${currentTheme === key ? theme.text : theme.textMuted}`}>{themes[key].name}</div>
@@ -445,7 +464,10 @@ function App() {
                   </div>
                   <button
                     onClick={() => setInstantFeedback(!instantFeedback)}
-                    className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${instantFeedback ? `bg-${theme.accent}-500` : 'bg-gray-500/30'}`}
+                    className="relative w-12 h-6 rounded-full transition-colors duration-300"
+                    style={{
+                      backgroundColor: instantFeedback ? theme.accentHex : 'rgba(107, 114, 128, 0.3)'
+                    }}
                   >
                     <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${instantFeedback ? 'translate-x-6' : 'translate-x-0'}`} />
                   </button>
@@ -459,7 +481,10 @@ function App() {
                     </div>
                     <button
                       onClick={() => setStrictMode(!strictMode)}
-                      className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${strictMode ? `bg-${theme.accent}-500` : 'bg-gray-500/30'}`}
+                      className="relative w-12 h-6 rounded-full transition-colors duration-300"
+                      style={{
+                        backgroundColor: strictMode ? theme.accentHex : 'rgba(107, 114, 128, 0.3)'
+                      }}
                     >
                       <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${strictMode ? 'translate-x-6' : 'translate-x-0'}`} />
                     </button>
@@ -664,7 +689,7 @@ function App() {
 
                 {isReviewing ? (
                   currentQuestion === questions.length - 1 ? (
-                    <MagneticButton onClick={() => setShowScore(true)} className={`px-8 py-3 bg-${theme.accent}-500/20 border-${theme.accent}-500/30 text-${theme.accent}-100 hover:bg-${theme.accent}-500/30`} theme={theme}>
+                    <MagneticButton onClick={() => setShowScore(true)} className="px-8 py-3" theme={theme}>
                       <span className="flex items-center gap-2">
                         Finalizar Revisión
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
