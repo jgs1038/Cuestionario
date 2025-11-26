@@ -9,13 +9,23 @@ function App() {
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [userAnswers, setUserAnswers] = useState({}); // Store all user answers: { [questionIndex]: optionIndex }
-  const [isReviewing, setIsReviewing] = useState(false); // New state for review mode
+  const [isReviewing, setIsReviewing] = useState(false);
+
+  // Config State
+  const [instantFeedback, setInstantFeedback] = useState(false);
+  const [strictMode, setStrictMode] = useState(true);
+
+  // Track which questions have had their feedback revealed (answered while in Instant Mode)
+  const [feedbackRevealed, setFeedbackRevealed] = useState({}); // { [questionIndex]: boolean }
 
   // File management
   const [availableFiles, setAvailableFiles] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentFileName, setCurrentFileName] = useState('Default (JSON)');
+
+  // Grid View State
+  const [showGrid, setShowGrid] = useState(false);
 
   useEffect(() => {
     loadFileList();
@@ -44,7 +54,11 @@ function App() {
   };
 
   const handleAnswerOptionClick = (index) => {
-    if (isReviewing) return; // Disable clicking in review mode
+    if (isReviewing) return;
+
+    // If feedback is already revealed for this question AND Strict Mode is ON, it is LOCKED.
+    // This applies regardless of the current mode (Normal or Instant).
+    if (feedbackRevealed[currentQuestion] && strictMode) return;
 
     // Save answer
     setUserAnswers(prev => ({
@@ -52,7 +66,13 @@ function App() {
       [currentQuestion]: index
     }));
 
-    // We don't auto-advance anymore, user must click Next
+    // If instant feedback is currently enabled, mark this question as revealed immediately
+    if (instantFeedback) {
+      setFeedbackRevealed(prev => ({
+        ...prev,
+        [currentQuestion]: true
+      }));
+    }
   };
 
   const calculateScore = () => {
@@ -92,34 +112,65 @@ function App() {
     setScore(0);
     setShowScore(false);
     setUserAnswers({});
+    setFeedbackRevealed({});
     setIsReviewing(false);
+    setShowGrid(false);
   };
 
   // Helper to determine option style
   const getOptionStyle = (index) => {
     const baseStyle = "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 font-medium flex items-center ";
+    const correctIndex = questions[currentQuestion].correctAnswer;
+    const userSelected = userAnswers[currentQuestion];
 
-    if (isReviewing) {
-      const correctIndex = questions[currentQuestion].correctAnswer;
-      const userSelected = userAnswers[currentQuestion];
+    // Feedback is shown if:
+    // 1. We are in Review Mode (end of quiz)
+    // 2. The question has been permanently revealed (feedbackRevealed is true)
+    const isFeedbackShown = isReviewing || feedbackRevealed[currentQuestion];
 
+    if (isFeedbackShown && userSelected !== undefined) {
       if (index === correctIndex) {
-        // Always highlight correct answer in green in review mode
         return baseStyle + "bg-teal-100 border-teal-500 text-teal-800 font-bold shadow-sm";
       }
       if (index === userSelected && index !== correctIndex) {
-        // Highlight wrong user selection in red
         return baseStyle + "bg-red-100 border-red-500 text-red-800 opacity-80";
       }
       return baseStyle + "border-gray-100 text-gray-400 opacity-60";
     }
 
-    // Normal Quiz Mode
-    const isSelected = userAnswers[currentQuestion] === index;
+    // Normal Quiz Mode (Selection only)
+    const isSelected = userSelected === index;
     if (isSelected) {
       return baseStyle + "bg-teal-50 border-teal-400 text-teal-700 font-bold shadow-md transform scale-[1.01]";
     }
     return baseStyle + "border-gray-100 text-gray-600 hover:bg-teal-50 hover:border-teal-200 hover:shadow-sm";
+  };
+
+  // Helper for grid button style
+  const getGridButtonStyle = (index) => {
+    const isCurrent = currentQuestion === index;
+    const isAnswered = userAnswers[index] !== undefined;
+    const isCorrect = isAnswered && userAnswers[index] === questions[index].correctAnswer;
+
+    const isFeedbackShown = isReviewing || feedbackRevealed[index];
+
+    let style = "w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center transition-all ";
+
+    if (isCurrent) {
+      return style + "ring-2 ring-offset-2 ring-teal-500 bg-teal-600 text-white shadow-lg scale-110 z-10";
+    }
+
+    if (isFeedbackShown) {
+      if (isAnswered) {
+        return style + (isCorrect ? "bg-teal-100 text-teal-700 border border-teal-300" : "bg-red-100 text-red-700 border border-red-300");
+      }
+    } else {
+      if (isAnswered) {
+        return style + "bg-blue-100 text-blue-700 border border-blue-200";
+      }
+    }
+
+    return style + "bg-gray-100 text-gray-500 hover:bg-gray-200";
   };
 
   return (
@@ -154,6 +205,44 @@ function App() {
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
+            </div>
+
+            {/* Config Section */}
+            <div className="mb-8">
+              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configuración</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                  <div>
+                    <div className="font-semibold text-gray-700">Corrección Inmediata</div>
+                    <div className="text-xs text-gray-400 mt-1">Ver respuesta al instante</div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setInstantFeedback(!instantFeedback);
+                    }}
+                    className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out focus:outline-none flex items-center ${instantFeedback ? 'bg-teal-500' : 'bg-gray-300'}`}
+                  >
+                    <span className={`absolute left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out ${instantFeedback ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </button>
+                </div>
+
+                {instantFeedback && (
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 animate-fade-in">
+                    <div>
+                      <div className="font-semibold text-gray-700">Modo Estricto</div>
+                      <div className="text-xs text-gray-400 mt-1">Bloquear respuesta tras contestar</div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setStrictMode(!strictMode);
+                      }}
+                      className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out focus:outline-none flex items-center ${strictMode ? 'bg-teal-500' : 'bg-gray-300'}`}
+                    >
+                      <span className={`absolute left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out ${strictMode ? 'translate-x-6' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="mb-8">
@@ -239,19 +328,49 @@ function App() {
           <>
             <div className="mb-8 flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-teal-600 tracking-wider uppercase mb-1">Pregunta {currentQuestion + 1} de {questions.length}</span>
-                {isReviewing && <span className="text-sm font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-md w-fit">Modo Revisión</span>}
+                <button
+                  onClick={() => setShowGrid(!showGrid)}
+                  className="text-xs font-bold text-teal-600 tracking-wider uppercase mb-1 hover:text-teal-800 flex items-center gap-1"
+                >
+                  Pregunta {currentQuestion + 1} de {questions.length}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${showGrid ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                <div className="flex gap-2">
+                  {isReviewing && <span className="text-sm font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-md w-fit">Modo Revisión</span>}
+                  {instantFeedback && !isReviewing && <span className="text-sm font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md w-fit">Corrección Inmediata</span>}
+                </div>
               </div>
-              {!isReviewing && (
+              {!isReviewing && !instantFeedback && (
                 <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl font-bold text-sm shadow-sm border border-teal-100">
                   Puntos: {score}
                 </div>
               )}
             </div>
 
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-tight">{questions[currentQuestion].question}</h2>
+            {/* Question Grid */}
+            {showGrid && (
+              <div className="mb-8 p-4 bg-gray-50 rounded-2xl border border-gray-100 animate-fade-in max-h-60 overflow-y-auto">
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Navegación de Preguntas</h3>
+                <div className="flex flex-wrap gap-2">
+                  {questions.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setCurrentQuestion(index);
+                        setShowGrid(false);
+                      }}
+                      className={getGridButtonStyle(index)}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-            {!isReviewing && (
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-tight whitespace-pre-wrap">{questions[currentQuestion].question}</h2>
+
+            {!isReviewing && !showGrid && (
               <div className="w-full bg-gray-100 h-2 mb-10 rounded-full overflow-hidden">
                 <div className="bg-gradient-to-r from-teal-400 to-cyan-500 h-full transition-all duration-500 ease-out" style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}></div>
               </div>
@@ -259,11 +378,12 @@ function App() {
 
             <div className="space-y-4 mb-10">
               {questions[currentQuestion].options.map((option, index) => {
+                const isFeedbackShown = feedbackRevealed[currentQuestion];
                 return (
                   <button
                     key={index}
                     onClick={() => handleAnswerOptionClick(index)}
-                    disabled={isReviewing}
+                    disabled={isReviewing || (isFeedbackShown && strictMode)}
                     className={getOptionStyle(index)}
                   >
                     <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-4 text-sm font-bold transition-colors ${userAnswers[currentQuestion] === index ? 'bg-teal-500 border-teal-500 text-white' : 'bg-white border-gray-200 text-gray-500'}`}>
@@ -271,11 +391,11 @@ function App() {
                     </span>
                     <span className="text-lg">{option}</span>
 
-                    {/* Icons for review mode */}
-                    {isReviewing && index === questions[currentQuestion].correctAnswer && (
+                    {/* Icons for review mode or instant feedback */}
+                    {(isReviewing || (isFeedbackShown && userAnswers[currentQuestion] !== undefined)) && index === questions[currentQuestion].correctAnswer && (
                       <svg className="w-6 h-6 ml-auto text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     )}
-                    {isReviewing && userAnswers[currentQuestion] === index && index !== questions[currentQuestion].correctAnswer && (
+                    {(isReviewing || (isFeedbackShown && userAnswers[currentQuestion] !== undefined)) && userAnswers[currentQuestion] === index && index !== questions[currentQuestion].correctAnswer && (
                       <svg className="w-6 h-6 ml-auto text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     )}
                   </button>

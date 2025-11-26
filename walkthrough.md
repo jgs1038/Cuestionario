@@ -11,10 +11,15 @@ I have updated the application to support loading questionnaires from Markdown f
 
 ### 2. Frontend Logic
 - **`src/utils/markdownParser.js`**: A utility to parse Markdown files into the JSON format expected by the quiz app.
+    - **Update**: Improved to support multi-line questions and ignore section headers that don't contain options. It now captures text following a header as part of the question body. Also supports "mepro" style questions with `**N. Question**` and `- ☑` / `- ☐` options.
 - **`src/utils/fileFetcher.js`**: Utilities to fetch the list of files from the Nginx autoindex page and fetch file content.
 - **`src/App.jsx`**:
     - **UI Redesign**: Switched to a modern Turquoise/Teal theme with glassmorphism effects and improved animations.
     - **Review Mode**: Added ability to review answers after finishing the quiz, showing correct and incorrect selections.
+    - **Immediate Feedback Mode**: Added a configuration option to see correct/incorrect answers immediately upon selection. Toggling this no longer restarts the quiz.
+    - **Permanent Feedback Logic**: Once a question's feedback is revealed (by answering in Immediate Mode), it remains permanently revealed (Green/Red) and LOCKED (if Strict Mode is ON), even if you switch back to Normal Mode.
+    - **Strict Mode**: If active, revealed questions are locked. If inactive, you can change answers even after they are revealed. Switching modes does NOT retroactively reveal answers.
+    - **Question Grid**: Added a toggleable grid view to jump to any question directly.
     - **State Management**: Updated to track all user answers to support the review feature.
     - **Navigation**: Added Menu, File Selector, and manual Previous/Next navigation.
 
