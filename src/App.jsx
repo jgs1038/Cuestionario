@@ -147,8 +147,8 @@ const FormattedText = ({ text, theme, className = "" }) => {
           );
         }
 
-        // 2. Process Inline Code (` ... `) within non-block parts
-        const inlineParts = part.split(/(`[^`]+`)/g);
+        // 2. Process Inline Code (` ... `) and Bold/Italic within non-block parts
+        const inlineParts = part.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
 
         return (
           <span key={index} className="whitespace-pre-wrap">
@@ -164,6 +164,14 @@ const FormattedText = ({ text, theme, className = "" }) => {
                     {inlineContent}
                   </code>
                 );
+              } else if (subPart.startsWith('**') && subPart.endsWith('**')) {
+                // Render Bold Text
+                const boldContent = subPart.slice(2, -2);
+                return <strong key={subIndex}>{boldContent}</strong>;
+              } else if (subPart.startsWith('*') && subPart.endsWith('*') && !subPart.startsWith('**')) {
+                // Render Italic Text
+                const italicContent = subPart.slice(1, -1);
+                return <em key={subIndex}>{italicContent}</em>;
               }
               // Regular Text
               return subPart;
@@ -275,6 +283,7 @@ function App() {
   const [strictMode, setStrictMode] = useState(true);
   const [feedbackRevealed, setFeedbackRevealed] = useState({});
   const [currentTheme, setCurrentTheme] = useState('default');
+  const [fontSize, setFontSize] = useState(100); // Percentage: 100 = normal
 
   // File management
   const [availableFiles, setAvailableFiles] = useState([]);
@@ -408,7 +417,7 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen ${theme.bg} flex items-center justify-center p-4 font-sans relative overflow-hidden transition-colors duration-700`}>
+    <div className={`min-h-screen ${theme.bg} flex items-center justify-center p-4 font-sans relative overflow-hidden transition-colors duration-700`} style={{ fontSize: `${fontSize}%` }}>
 
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -463,6 +472,59 @@ function App() {
                     <div className={`text-xs font-medium text-center ${currentTheme === key ? theme.text : theme.textMuted}`}>{themes[key].name}</div>
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Font Size Control */}
+            <div className="mb-10">
+              <h3 className={`text-xs font-bold ${theme.textMuted} uppercase tracking-widest mb-6 ml-1`}>Tamaño de Fuente</h3>
+              <div className={`${theme.glass} p-4 rounded-2xl`}>
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={() => setFontSize(Math.max(75, fontSize - 10))}
+                    disabled={fontSize <= 75}
+                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontSize <= 75 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
+                  >
+                    −
+                  </button>
+                  <div className="flex flex-col items-center">
+                    <span className={`text-2xl font-bold ${theme.text}`}>{fontSize}%</span>
+                    <span className={`text-xs ${theme.textMuted} mt-1`}>Tamaño actual</span>
+                  </div>
+                  <button
+                    onClick={() => setFontSize(Math.min(150, fontSize + 10))}
+                    disabled={fontSize >= 150}
+                    className={`w-10 h-10 rounded-lg border transition-all duration-300 flex items-center justify-center font-bold text-xl ${fontSize >= 150 ? 'opacity-30 cursor-not-allowed' : `${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text}`}`}
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="flex justify-center gap-2">
+                  <button
+                    onClick={() => setFontSize(75)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 75 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                  >
+                    Pequeño
+                  </button>
+                  <button
+                    onClick={() => setFontSize(100)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 100 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                  >
+                    Normal
+                  </button>
+                  <button
+                    onClick={() => setFontSize(125)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 125 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                  >
+                    Grande
+                  </button>
+                  <button
+                    onClick={() => setFontSize(150)}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${fontSize === 150 ? `${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}` : `${theme.glass} ${theme.textMuted} ${theme.glassHover}`}`}
+                  >
+                    Muy Grande
+                  </button>
+                </div>
               </div>
             </div>
 
