@@ -377,6 +377,7 @@ const QuizCard = ({ file, theme, onLoadNormal, onLoadRandom }) => {
 function App() {
   const [view, setView] = useState('home'); // 'home', 'quiz'
   const [questions, setQuestions] = useState([]);
+  const [originalQuestions, setOriginalQuestions] = useState([]); // Mantener orden original
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -407,6 +408,38 @@ function App() {
     loadFileList();
   }, []);
 
+  // Efecto para reordenar preguntas cuando cambian los sliders de aleatorización
+  useEffect(() => {
+    if (originalQuestions.length === 0) return; // No hay preguntas cargadas
+
+    let reorderedQuestions = [...originalQuestions];
+
+    // Aleatorizar preguntas si está activado
+    if (randomizeQuestions) {
+      reorderedQuestions = shuffleArray(reorderedQuestions);
+    }
+
+    // Aleatorizar respuestas si está activado
+    if (randomizeAnswers) {
+      reorderedQuestions = reorderedQuestions.map(q => {
+        const indices = q.options.map((_, i) => i);
+        const shuffledIndices = shuffleArray(indices);
+
+        return {
+          ...q,
+          options: shuffledIndices.map(i => q.options[i]),
+          correctAnswer: shuffledIndices.indexOf(q.correctAnswer)
+        };
+      });
+    }
+
+    setQuestions(reorderedQuestions);
+    // Reiniciar la posición actual si es necesario
+    setCurrentQuestion(0);
+    setUserAnswers({});
+    setFeedbackRevealed({});
+  }, [randomizeQuestions, randomizeAnswers]);
+
   // Shuffle function (Fisher-Yates)
   const shuffleArray = (array) => {
     const newArray = [...array];
@@ -435,6 +468,9 @@ function App() {
     if (content) {
       let parsedQuestions = parseMarkdownQuestions(content);
       if (parsedQuestions.length > 0) {
+        // Guardar las preguntas originales (sin aleatorizar)
+        setOriginalQuestions(parsedQuestions);
+
         // Randomize questions if enabled or if randomize parameter is true
         if (randomizeQuestions || randomize) {
           parsedQuestions = shuffleArray(parsedQuestions);
@@ -759,14 +795,16 @@ function App() {
       )}
 
       {view === 'home' ? (
-        <div className="relative z-10 w-full max-w-4xl px-4 animate-fade-in">
-          <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 text-center`}>
-            <h1 className={`text-4xl md:text-6xl font-bold ${theme.text} mb-4 ${theme.shadow} tracking-tight`}>
-              Cuestionarios
-            </h1>
-            <p className={`text-lg ${theme.textMuted} mb-8 max-w-2xl mx-auto`}>
-              Selecciona un cuestionario para comenzar a practicar.
-            </p>
+        <div className="relative z-10 w-full max-w-4xl px-4 animate-fade-in mx-auto">
+          <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12`}>
+            <div className="text-center mb-10">
+              <h1 className={`text-4xl md:text-6xl font-bold ${theme.text} mb-4 ${theme.shadow} tracking-tight`}>
+                Cuestionarios
+              </h1>
+              <p className={`text-lg ${theme.textMuted} max-w-2xl mx-auto`}>
+                Selecciona un cuestionario para comenzar a practicar.
+              </p>
+            </div>
 
             {loading ? (
               <div className={`flex justify-center items-center space-x-3 text-${theme.accent}-400 p-8`}>
