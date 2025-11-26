@@ -267,6 +267,120 @@ const MagneticButton = ({ children, onClick, className = "", disabled = false, a
   );
 };
 
+// --- Icon Button with Magnetic Effects ---
+const IconButton = ({ children, onClick, className = "", theme, title }) => {
+  const btnRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setSpotlightPos({ x, y });
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const moveX = (x - centerX) * 0.02;
+    const moveY = (y - centerY) * 0.02;
+
+    setPosition({ x: moveX, y: moveY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setOpacity(0);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <div className="relative group/icon" style={{ perspective: '1000px' }}>
+      <button
+        ref={btnRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        title={title}
+        style={{
+          transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${isHovering ? 1.1 : 1})`,
+          transition: isHovering ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        }}
+        className={`relative rounded-full p-3 backdrop-blur-sm border ${theme.border} transition-all duration-300 ease-out overflow-hidden ${theme.glass} ${theme.text} opacity-60 hover:opacity-100 z-10 ${className}`}
+      >
+        {/* Spotlight Gradient */}
+        <div
+          className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 rounded-full"
+          style={{
+            opacity,
+            background: `radial-gradient(100px circle at ${spotlightPos.x}px ${spotlightPos.y}px, ${theme.id === 'white' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.15)'}, transparent 40%)`,
+          }}
+        />
+
+        {/* Icon Content */}
+        <div className="relative z-10">
+          {children}
+        </div>
+      </button>
+    </div>
+  );
+};
+
+// --- Quiz Card Component ---
+const QuizCard = ({ file, theme, onLoadNormal, onLoadRandom }) => {
+  return (
+    <div className={`relative rounded-xl border ${theme.border} ${theme.glass} backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-${theme.accent}-400/30 group`}>
+      <div className="p-6">
+        {/* Header with MD badge and Icons */}
+        <div className="flex items-center justify-between mb-2">
+          <span className={`text-xs font-bold px-2 py-1 rounded ${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}`}>
+            MD
+          </span>
+
+          {/* Action Icons */}
+          <div className="flex gap-2">
+            <IconButton onClick={onLoadNormal} theme={theme} title="Iniciar cuestionario normal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </IconButton>
+
+            <IconButton onClick={onLoadRandom} theme={theme} title="Iniciar cuestionario aleatorio">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+                <path d="M2 6h1.4c1.3 0 2.5.6 3.3 1.7l6.1 8.6c.7 1.1 2 1.7 3.3 1.7H22"/>
+                <path d="M18 2l4 4-4 4"/>
+                <path d="M18 14l4 4-4 4"/>
+              </svg>
+            </IconButton>
+          </div>
+        </div>
+
+        {/* Quiz Title */}
+        <div className={`font-bold text-lg mb-1 truncate ${theme.text}`} title={file}>
+          {file.replace('.md', '').replace(/_/g, ' ')}
+        </div>
+
+        {/* Quiz Description */}
+        <div className={`text-xs ${theme.textMuted}`}>Cuestionario de práctica</div>
+      </div>
+    </div>
+  );
+};
+
 // --- Main App ---
 
 function App() {
@@ -669,56 +783,13 @@ function App() {
                   </div>
                 )}
                 {availableFiles.map((file, index) => (
-                  <div
+                  <QuizCard
                     key={index}
-                    className={`relative rounded-xl border ${theme.border} ${theme.glass} backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-${theme.accent}-400/30 group`}
-                  >
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`text-xs font-bold px-2 py-1 rounded ${theme.activeBg} ${theme.activeText} border ${theme.activeBorder}`}>
-                          MD
-                        </span>
-                      </div>
-                      <div className={`font-bold text-lg mb-1 truncate ${theme.text}`} title={file}>
-                        {file.replace('.md', '').replace(/_/g, ' ')}
-                      </div>
-                      <div className={`text-xs ${theme.textMuted} mb-4`}>Cuestionario de práctica</div>
-
-                      {/* Action Buttons */}
-                      <div className="flex gap-3 mt-4">
-                        <button
-                          onClick={() => loadFile(file, false)}
-                          className={`group/btn relative flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-all duration-300 ${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text} hover:border-${theme.accent}-400/50`}
-                          title="Iniciar cuestionario normal"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover/btn:scale-110">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                          {/* Tooltip */}
-                          <span className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-xs font-medium ${theme.text} ${theme.glass} rounded-lg border ${theme.border} whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none`}>
-                            Normal
-                          </span>
-                        </button>
-
-                        <button
-                          onClick={() => loadFile(file, true)}
-                          className={`group/btn relative flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-all duration-300 ${theme.border} ${theme.glass} ${theme.glassHover} ${theme.text} hover:border-${theme.accent}-400/50`}
-                          title="Iniciar cuestionario aleatorio"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover/btn:rotate-12">
-                            <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
-                            <path d="M2 6h1.4c1.3 0 2.5.6 3.3 1.7l6.1 8.6c.7 1.1 2 1.7 3.3 1.7H22"/>
-                            <path d="M18 2l4 4-4 4"/>
-                            <path d="M18 14l4 4-4 4"/>
-                          </svg>
-                          {/* Tooltip */}
-                          <span className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-xs font-medium ${theme.text} ${theme.glass} rounded-lg border ${theme.border} whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none`}>
-                            Aleatorio
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    file={file}
+                    theme={theme}
+                    onLoadNormal={() => loadFile(file, false)}
+                    onLoadRandom={() => loadFile(file, true)}
+                  />
                 ))}
               </div>
             )}
