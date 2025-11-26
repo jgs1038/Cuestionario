@@ -1,0 +1,343 @@
+[
+  {
+    "id": 1,
+    "question": "El modificador protected permite el acceso a:",
+    "options": [
+      "Sólo a clientes del mismo paquete.",
+      "Sólo a descendientes.",
+      "Clientes del mismo paquete y descendientes."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 2,
+    "question": "En Java, hasta su version 7, no había conflictos de herencia múltiple porque:",
+    "options": [
+      "No se pueden heredar dos propiedades diferentes y concretas con el mismo nombre.",
+      "No existe herencia múltiple de clases.",
+      "Se evitan los conflictos con renombrados."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 3,
+    "question": "Dado: Poligono p1 = new Triangulo(); Triangulo t = new Triangulo(); Poligono p2 = new Poligono(); ¿Qué instancias tenemos?",
+    "options": [
+      "Dos instancias directas de triangulo, y tres instancias de poligono.",
+      "Dos instancias directas de triangulo, y una instancia de poligono.",
+      "Tenemos tres instancias directas de poligono."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 4,
+    "question": "Una conversión downcast en la jerarquía de herencia:",
+    "options": [
+      "Es opcional usar un molde de conversión.",
+      "Es ilegal si los tipos coinciden.",
+      "Exige usar un molde de conversión."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 5,
+    "question": "En un descendiente los invariantes son:",
+    "options": [
+      "Más restrictivos.",
+      "Menos restrictivos.",
+      "Iguales."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 6,
+    "question": "En Java tenemos de manera estricta:",
+    "options": [
+      "Sobrecarga de operadores y métodos.",
+      "Sólo sobrecarga de operadores.",
+      "Sólo sobrecarga de métodos."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 7,
+    "question": "En Java tenemos herencia...",
+    "options": [
+      "Simple de clases.",
+      "Simple o múltiple de clase en función de las sintaxis utilizada.",
+      "Múltiple de clases."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 8,
+    "question": "Siguiendo el principio de Liskov podríamos decir:",
+    "options": [
+      "Todo rectángulo poder ser visto como un polígono.",
+      "Algunos rectángulos pueden ser vistos como polígonos.",
+      "Todo polígono puede ser visto como rectángulo."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 9,
+    "question": "El polimorfismo permite que a una variable de un tipo referencia a objeto...",
+    "options": [
+      "Sólo se pueden asignar variables de sus subtipos.",
+      "Sólo se pueden asignar variables de ese mismo tipo.",
+      "No hay restricciones en la asignación de variables de cualquier tipo."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 10,
+    "question": "Una redefinición en Java:",
+    "options": [
+      "Se produce sólo en atributos.",
+      "Se produce en atributos y métodos.",
+      "Se produce sólo en métodos."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 11,
+    "question": "La inclusión de métodos implementados en las interfaces a partir de Java 8 tiene como objetivo:",
+    "options": [
+      "Permitir la inclusión de nuevos métodos siendo compatibles las clases de versiones previas.",
+      "Permite añadir herencia múltiple de clases en el lenguaje.",
+      "No tienen ningún objetivo adicional, salvo la inclusión de código."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 12,
+    "question": "En Java 8, en caso de conflicto de un método concreto de una clase y un método implementado en una interfaz:",
+    "options": [
+      "Se prefiere el de la clase.",
+      "No se detecta realmente como conflicto en compilación.",
+      "Se prefiere el de la interfaz."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 13,
+    "question": "La inicialización en herencia:",
+    "options": [
+      "Se usa super si tenemos constructores 'no por defecto' en las superclases.",
+      "Se usa this para invocar al constructor de la superclase.",
+      "Siempre se tiene que usar la referencia super."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 14,
+    "question": "La referencia paterna en Java es:",
+    "options": [
+      "myBase",
+      "baseClass",
+      "super",
+      "this"
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 15,
+    "question": "Una conversión upcast en la jerarquía de herencia:",
+    "options": [
+      "Es opcional usar un molde de conversión.",
+      "Es ilegal.",
+      "Obliga a usar un molde de conversión."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 16,
+    "question": "La redefinición: void metodo() { super.metodo(); }",
+    "options": [
+      "No tiene efecto ninguno.",
+      "Sobra el uso del super.",
+      "Es obligatoria incluirla para que la clase pueda compilar."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 17,
+    "question": "Una clase abstracta en Java:",
+    "options": [
+      "No es instanciable.",
+      "Es una interface.",
+      "Es instanciable."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 18,
+    "question": "Si redefinimos un método público en el ancestro, como privado en el descendiente...",
+    "options": [
+      "Es incorrecto hacer más restrictivo el modificador en el descendiente.",
+      "Es correcto independientemente del uso que se vaya a hacer del método.",
+      "Es correcto si nadie intenta usar el método del descendiente."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 19,
+    "question": "La herencia puede ser vista como...",
+    "options": [
+      "No tiene una representación gráfica asociada.",
+      "Mapa de Karnaugh.",
+      "Relación jerárquica o conjuntos de tipos."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 20,
+    "question": "En Java 8, si se heredan dos métodos diferentes, uno implementado en interfaz y otro abstracto de clase, con misma signatura:",
+    "options": [
+      "Se prefiere el método abstracto en la clase.",
+      "Se debe redefinir el método.",
+      "Se prefiere el método implementado en la interfaz."
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": 21,
+    "question": "La ligadura dinámica se basa:",
+    "options": [
+      "En el tipo de la clase que contiene la variable.",
+      "En el tipo estático de las variables.",
+      "En el tipo dinámico de las variables."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 22,
+    "question": "En Java existe herencia múltiple:",
+    "options": [
+      "De clases con clases.",
+      "De interfaces con clases.",
+      "De interfaces con interfaces."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 23,
+    "question": "En Java, en caso de incompatibilidad en el intento de asignación de variables referencia a objeto con un molde (cast):",
+    "options": [
+      "Se lanza una excepción en tiempo de ejecución por incompatibilidad de tipos.",
+      "Se produce una asignación de valor nulo a la variable.",
+      "No se realiza la asignación dejando el valor actual en la variable."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 24,
+    "question": "El polimorfismo se basa:",
+    "options": [
+      "En el tipo de la clase que contiene la variable.",
+      "En el tipo estático de las variables.",
+      "En el tipo dinámico de las variables."
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": 25,
+    "question": "A partir de Java 8, un método en una interfaz....",
+    "options": [
+      "No puede incluir un cuerpo de instrucciones.",
+      "Ya no son implícitamente abstract.",
+      "Puede incluir un cuerpo de instrucciones si se utiliza la palabra clave default."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 26,
+    "question": "Una clase final en Java:",
+    "options": [
+      "No puede tener descendientes.",
+      "Tiene como máximo un descendiente.",
+      "Tiene infinitos descendientes."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 27,
+    "question": "En una interface Java hasta la versión 7 incluida:",
+    "options": [
+      "Hay atributos y métodos implementados.",
+      "No hay código ejecutable.",
+      "Sólo se pueden definir signaturas de métodos abstractos."
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": 28,
+    "question": "En Java 8, herencia diamante (mismo método por varios caminos):",
+    "options": [
+      "Se prefiere el más específico.",
+      "Se prefiere el más general.",
+      "Se obliga al programador a resolver la ambigüedad."
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "id": 29,
+    "question": "Invocación var.operacion() es correcta si:",
+    "options": [
+      "Sólo si operacion está en la clase concreta.",
+      "Sólo si operacion está definida en la clase del tipo de la variable var o ancestros.",
+      "Sólo si operacion está en un ancestro."
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": 30,
+    "question": "class B extends A (constructor super.i=1):",
+    "options": [
+      "Se tiene sólo un atributo i, con valor 0.",
+      "Se tiene sólo un atributo i, con valor 1.",
+      "Se tienen dos atributos i, uno con valor 0 y otro con valor 1."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 31,
+    "question": "Una clase en Java que hereda un método abstracto y no lo implementa:",
+    "options": [
+      "Puede ser concreta.",
+      "Pasa a ser una interface.",
+      "Pasa a ser abstracta."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 32,
+    "question": "class B extends A (constructor i=1, variable shadow):",
+    "options": [
+      "Se tiene un atributo i, con valor 0.",
+      "Se tiene un atributo i, con valor 1.",
+      "Se tienen dos atributos i, uno con valor 0 y otro con valor 1."
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": 33,
+    "question": "Cuando se ejecuta el constructor en Java:",
+    "options": [
+      "No es necesario indicar nada.",
+      "Se realizan llamadas implícitas o explícitas a los constructores de los ancestros.",
+      "Se inicializa el objeto, sin necesidad de reutilizar los ancestros."
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": 34,
+    "question": "El concepto de herencia está ligado al principio de:",
+    "options": [
+      "Reutilizar clases, sin modificar las superclases.",
+      "Tener que editar las superclases para habilitar herencia.",
+      "Copiar y pegar código manualmente."
+    ],
+    "correctAnswer": 0
+  }
+]
