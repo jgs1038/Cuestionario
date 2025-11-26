@@ -412,6 +412,23 @@ function App() {
   useEffect(() => {
     if (originalQuestions.length === 0) return; // No hay preguntas cargadas
 
+    // 1. Guardar respuestas actuales usando el texto de la pregunta como identificador
+    const savedAnswersByQuestion = {};
+    const savedFeedbackByQuestion = {};
+
+    questions.forEach((q, index) => {
+      if (userAnswers[index] !== undefined) {
+        // Guardar tanto el índice de respuesta como la respuesta real seleccionada
+        savedAnswersByQuestion[q.question] = {
+          selectedOptionText: q.options[userAnswers[index]],
+          originalAnswerIndex: userAnswers[index]
+        };
+      }
+      if (feedbackRevealed[index]) {
+        savedFeedbackByQuestion[q.question] = true;
+      }
+    });
+
     let reorderedQuestions = [...originalQuestions];
 
     // Aleatorizar preguntas si está activado
@@ -433,11 +450,41 @@ function App() {
       });
     }
 
+    // 2. Restaurar respuestas en el nuevo orden
+    const newUserAnswers = {};
+    const newFeedbackRevealed = {};
+
+    reorderedQuestions.forEach((q, newIndex) => {
+      const savedAnswer = savedAnswersByQuestion[q.question];
+      if (savedAnswer) {
+        // Encontrar el nuevo índice de la opción seleccionada
+        const newOptionIndex = q.options.findIndex(opt => opt === savedAnswer.selectedOptionText);
+        if (newOptionIndex !== -1) {
+          newUserAnswers[newIndex] = newOptionIndex;
+        }
+      }
+
+      if (savedFeedbackByQuestion[q.question]) {
+        newFeedbackRevealed[newIndex] = true;
+      }
+    });
+
     setQuestions(reorderedQuestions);
-    // Reiniciar la posición actual si es necesario
-    setCurrentQuestion(0);
-    setUserAnswers({});
-    setFeedbackRevealed({});
+    setUserAnswers(newUserAnswers);
+    setFeedbackRevealed(newFeedbackRevealed);
+
+    // Mantener la pregunta actual si es posible, de lo contrario ir a la primera
+    if (questions[currentQuestion]) {
+      const currentQuestionText = questions[currentQuestion].question;
+      const newCurrentIndex = reorderedQuestions.findIndex(q => q.question === currentQuestionText);
+      if (newCurrentIndex !== -1) {
+        setCurrentQuestion(newCurrentIndex);
+      } else {
+        setCurrentQuestion(0);
+      }
+    } else {
+      setCurrentQuestion(0);
+    }
   }, [randomizeQuestions, randomizeAnswers]);
 
   // Shuffle function (Fisher-Yates)
