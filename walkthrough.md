@@ -13,10 +13,10 @@ I have updated the application to support loading questionnaires from Markdown f
 - **`src/utils/markdownParser.js`**: A utility to parse Markdown files into the JSON format expected by the quiz app.
 - **`src/utils/fileFetcher.js`**: Utilities to fetch the list of files from the Nginx autoindex page and fetch file content.
 - **`src/App.jsx`**:
-    - Added a **Menu** button (top right) to open the settings sidebar.
-    - Added a **File Selector** in the menu to choose between the default JSON or available `.md` files.
-    - Added **Previous** and **Next** buttons for manual navigation.
-    - Preserved the existing UI styling while adding these new features.
+    - **UI Redesign**: Switched to a modern Turquoise/Teal theme with glassmorphism effects and improved animations.
+    - **Review Mode**: Added ability to review answers after finishing the quiz, showing correct and incorrect selections.
+    - **State Management**: Updated to track all user answers to support the review feature.
+    - **Navigation**: Added Menu, File Selector, and manual Previous/Next navigation.
 
 ### 3. Data
 - **`questions/sample.md`**: A sample questionnaire file to demonstrate the format.
