@@ -3,6 +3,9 @@
 ## 1. En cuanto al arranque y parada del sistema
 
 ### Pregunta 1.1
+
+**Apartado: 1. En cuanto al arranque y parada del sistema**
+
 **En cuanto al arranque y parada del sistema...**
 
 - [x] a. El programa cargador (master boot program o boot program) está en los primeros sectores del disco y con un tamaño prefijado.
@@ -17,6 +20,9 @@
 
 ### Pregunta 1.2
 
+**Apartado: 1. En cuanto al arranque y parada del sistema**
+
+
 - [ ] a. El iniciador de la ROM (situado en la ROM) puede soportar varios S.O. independientemente del programa cargador que se encuentre en los primeros sectores del disco.
 - [ ] b. El único kernel posible es el fichero /boot/vmlinuz-version.
 - [x] c. Ninguna de las otras respuestas es correcta.
@@ -28,6 +34,9 @@
 ---
 
 ### Pregunta 1.3
+
+**Apartado: 1. En cuanto al arranque y parada del sistema**
+
 
 - [ ] a. Para que el núcleo no tenga un tamaño muy grande, la mayoría de las opciones se programan en código máquina y se compilan de tal forma que el kernel resultante pueda ejecutarse en memoria por completo y de la forma más rápida.
 - [ ] b. Para que el núcleo no tenga un tamaño muy grande, la mayoría de las opciones se compilan como módulos, que se cargarán al terminar de arrancar el kernel. Por ello, en el arranque el núcleo necesitará cargar todos sus módulos para poder iniciar el sistema.
@@ -41,6 +50,9 @@
 
 ### Pregunta 1.4
 
+**Apartado: 1. En cuanto al arranque y parada del sistema**
+
+
 - [ ] a. El cargador del sistema realiza una comprobación del hardware del sistema, carga el kernel, carga el initrd (sistema de ficheros temporal inicial – RAM - /boot/initrd-version.img) y le pasa el control, el initrd carga los módulos necesarios y le devuelve el control al núcleo, crea el proceso Init (PID 1) y le pasa el control.
 - [ ] b. Ninguna de las otras respuestas son correctas.
 - [x] c. El kernel realiza una comprobación del hardware del sistema, se prepara a sí mismo para ejecutar el sistema inicializando sus tablas internas, creando las estructuras de datos necesarias, etc., carga inicialmente el initrd (sistema de ficheros temporal inicial – RAM - /boot/initrd-version.img) y le pasa el control, el initrd carga los módulos necesarios y le devuelve el control al núcleo, crea el proceso Init (PID 1) y le pasa el control.
@@ -52,6 +64,9 @@
 ---
 
 ### Pregunta 1.5
+
+**Apartado: 1. En cuanto al arranque y parada del sistema**
+
 
 - [x] a. El iniciador ROM es un programa en la ROM que comprueba el sistema desde el punto de vista hardware, almacena en memoria el programa cargador del S.O. y pasa el control al cargador del S.O., saltando a la dirección de memoria donde lo ha almacenado.
 - [ ] b. El iniciador ROM (/boot/grub/grub.conf, LILO - /etc/lilo.conf, BootMagic (parte de Norton PartitionMagic)...) es un programa en la ROM que comprueba el sistema desde el punto de vista hardware, almacena en memoria el programa cargador del S.O. y pasa el control al cargador del S.O., saltando a la dirección de memoria donde lo ha almacenado.
@@ -67,6 +82,9 @@
 
 ### Pregunta 2.1
 
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
+
 - [ ] a. "httpd" permite el acceso al Servidor Web.
 - [ ] b. "sshd" permite que al ordenador se pueda acceder con la orden ssh, que habilita una conexión de telnet y ftp segura.
 - [ ] c. "smbd" proporciona el servicio de compartición de ficheros con clientes Samba.
@@ -78,6 +96,9 @@
 ---
 
 ### Pregunta 2.2
+
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
 
 - [ ] a. "named" será el servicio encargado del servidor de Domain Name System (sólo es necesario si el ordenador hace de DNS)
 - [ ] b. "ntpd" será el servicio encargado de sincronizar la hora del sistema
@@ -91,6 +112,9 @@
 
 ### Pregunta 2.3
 
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
+
 - [ ] a. "named" será el servicio encargado del servidor de Domain Name System, siempre en ejecución en todas las máquinas Linux para que funcione correctamente ya que arranca los demonios usados por el sistema y que están a la escucha de las llamadas al sistema por parte del usuario.
 - [ ] b. "sendmail" será el encargado del correo electrónico en todas las distribuciones linux
 - [ ] c. El fichero "network" será el script que reactivará la red cuando se realiza cualquier tipo de modificación de su configuración.
@@ -102,6 +126,9 @@
 ---
 
 ### Pregunta 2.4
+
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
 
 - [ ] a. Algunas opciones correspondientes a xinetd.conf incluyen... El máximo número de peticiones que xinetd puede manejar simultáneamente. Las entradas de registro al archivo /var/log/secure. Registrar si la conexión tiene éxito. log_on_failure. cps. includedir /etc/xinetd.d/
 - [x] b. Todas las otras respuestas son correctas.
@@ -115,6 +142,9 @@
 
 ### Pregunta 2.5
 
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
+
 - [ ] a. "networkd" y no "named" será el servicio encargado del servidor de Domain Name System, siempre en ejecución en todas las máquinas linux. Y nunca estará presente en las máquinas clientes de este servicio.
 - [ ] b. "sendmail" no existe como servicio en las distribuciones linux ya que es un servicio postal en USA.
 - [ ] c. Ninguna de las otras opciones es correcta.
@@ -126,6 +156,9 @@
 ---
 
 ### Pregunta 2.6
+
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
 
 - [ ] a. Todas las otras respuestas son falsas.
 - [ ] b. Los diferentes procesos correspondientes a los servicios de red son ejecutados por xinetd según el fichero de configuración /etc/xinet.conf.
@@ -139,6 +172,9 @@
 
 ### Pregunta 2.7
 
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
+
 - [ ] a. "sshd" permite que al ordenador se pueda acceder con la orden ssh, que habilita una conexión de telnet y ftp segura. Para ello se realizará el arranque del demonio "telnetd" o "ftpd" dependiendo del servicio deseado.
 - [ ] b. "httpd" permite el acceso al Servidor Web. Este servicio se utilizará en paralelo con "sshd", servicio que será usado por "http" para el acceso seguro al sistema.
 - [ ] c. "smbd" proporciona el servicio de compartición de ficheros con clientes Samba/NFS. Será necesario determinar el tipo de cliente para adecuar la configuración en cada caso. Como ambos servicios son incompatibles sólo uno de ellos podría estar en funcionamiento en cada momento.
@@ -150,6 +186,9 @@
 ---
 
 ### Pregunta 2.8
+
+**Apartado: 2. En cuanto a los servicios de red en el sistema operativo linux**
+
 
 - [x] a. Los diferentes servicios de red son lanzados a través de procesos como el representado por el comando "/etc/init.d/http start" para el servidor web.
 - [ ] b. Los diferentes procesos de red son lanzados a través de procesos ejecutados desde el fichero /etc/init.d/xinetd.conf restart.
@@ -165,6 +204,9 @@
 
 ### Pregunta 3.1
 
+**Apartado: 3. En cuanto a las caídas del sistema operativo linux**
+
+
 - [x] a. Las caídas no ordenadas del sistema pueden deberse a fallos irrecuperables de hardware, problemas de Input/Output, problemas con alguno de los sistemas de ficheros del sistema, etc.
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. En caso de no poder rearrancar el sistema en modo multiusuario hay que indicar que se monte como partición raíz una distinta mediante "root=particion" en el arranque de GRUB.
@@ -176,6 +218,9 @@
 ---
 
 ### Pregunta 3.2
+
+**Apartado: 3. En cuanto a las caídas del sistema operativo linux**
+
 
 - [ ] a. Las caídas no ordenadas del sistema pueden deberse a la imposibilidad de realizar la escritura en disco en alguna de las particiones aunque estas no pertenezcan a ninguno de los sistemas de ficheros del sistema, si estas particiones contienen errores en la configuración del sistema.
 - [ ] b. Las caídas no ordenadas del sistema pueden deberse a la imposibilidad de realizar la escritura en disco en alguna de las particiones aunque estas no pertenezcan a ninguno de los sistemas de ficheros del sistema.
@@ -191,6 +236,9 @@
 
 ### Pregunta 4.1
 
+**Apartado: 4. En cuanto a la parada de linux**
+
+
 - [ ] a. A la hora de cerrar el sistema, si este se encuentra en modo multiusuario, se puede ejecutar la orden reboot para hacer un cierre lógico del sistema.
 - [ ] b. A la hora de cerrar el sistema, si este se encuentra en modo monousuario, se puede ejecutar la orden haltsys para hacer un cierre lógico del sistema.
 - [ ] c. A la hora de cerrar el sistema, si este se encuentra en modo multiusuario, se puede ejecutar la orden "telinit nivel" para hacer un cierre lógico del sistema.
@@ -202,6 +250,9 @@
 ---
 
 ### Pregunta 4.2
+
+**Apartado: 4. En cuanto a la parada de linux**
+
 
 - [ ] a. Los script en /etc/rcn.d o /etc/rc.d/rcn.d (dependerá de las distribuciones) se ejecutarán por parte del proceso kernel según un modelo no basado en eventos.
 - [x] b. Todos los script, llamados rc* en /etc/rc.d o /etc (dependerá de las distribuciones), son ejecutados por el Init mediante un modelo síncrono no basado en eventos.
@@ -215,6 +266,9 @@
 
 ### Pregunta 4.3
 
+**Apartado: 4. En cuanto a la parada de linux**
+
+
 - [ ] a. La orden shutdown a ejecutar será obligatoriamente con la opción -c.
 - [ ] b. La orden shutdown a ejecutar será obligatoriamente con la opción -k.
 - [x] c. Ninguna de las otras opciones es correcta.
@@ -226,6 +280,9 @@
 ---
 
 ### Pregunta 4.4
+
+**Apartado: 4. En cuanto a la parada de linux**
+
 
 - [ ] a. A la hora de terminar con los procesos del sistema, se debe notificar la próxima finalización de tales procesos antes de enviar la orden de apagado.
 - [ ] b. Ninguna de las otras opciones es correcta.
@@ -241,6 +298,9 @@
 
 ### Pregunta 5.1
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 **Si el sistema de ficheros raíz se quedase sin espacio (al 100% ocupado) el sistema tendría problemas para funcionar normalmente, por ejemplo no podría arrancar. ¿Por qué?**
 
 - [ ] a. No es cierto porque los ficheros se generarán de forma temporal en la memoria RAM y en todo caso en el área de swap por lo que el sistema seguiría funcionando sin problemas.
@@ -255,6 +315,9 @@
 
 ### Pregunta 5.2
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 - [x] a. Las caídas no ordenadas del sistema pueden deberse a fallos irrecuperables de hardware, problemas de Input/Output, problemas con alguno de los sistemas de ficheros del sistema, etc.
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. En caso de no poder rearrancar el sistema en modo multiusuario hay que indicar que se monte como partición raíz una distinta mediante "root=particion" en el arranque de GRUB.
@@ -266,6 +329,9 @@
 ---
 
 ### Pregunta 5.3
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 - [ ] a. Cuando un sistema de ficheros está dañado se debe realizar un chequeo del mismo. Para ello, se parará el sistema porque al arrancar el propio sistema determinará que se ha producido un error por lo que iniciará el chequeo correspondiente.
 - [ ] b. Cuando un sistema de ficheros de red (como puede ser el tipo NFS) está dañado se debe realizar un chequeo del mismo. Para ello, se parará el sistema de forma ordenada, y al arrancar en un modo con red, y por tanto antes de que sea montado desde nuestro sistema, se hará el correspondiente chequeo del mismo a través de una aplicación como fsck.
@@ -279,6 +345,9 @@
 
 ### Pregunta 5.4
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 - [ ] a. Ninguna de las otras respuestas es correcta.
 - [ ] b. Cuando un sistema de ficheros está dañado se ejecuta una aplicación para el chequeo y resolución de posibles problemas. Estas herramientas chequean la consistencia del sistema de ficheros, detecta problemas e intenta repararlos. Para ello actúa sobre el contenido de los ficheros, pero no sobre su estructura detectando bloques que pertenecen a varios ficheros, bloques marcados como libres pero que están en uso, bloques marcados como usados pero que están libres, inconsistencia del nº de enlaces, nodos-i marcados como ocupados pero libres, etc.
 - [ ] c. Cuando un sistema de ficheros está dañado se ejecuta una aplicación para el chequeo y resolución de posibles problemas. Estas herramientas chequean la consistencia del sistema de ficheros, detecta problemas e intenta repararlos. Para ello actúa sobre su estructura, pero no sobre el contenido de los ficheros leyendo y copiando los ficheros asociados al sistema de ficheros para determinar su estado.
@@ -290,6 +359,9 @@
 ---
 
 ### Pregunta 5.5
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 **La diferencia fundamental entre tar, cpio, dump y dd a la hora de hacer copias de seguridad es que tar agrupa ficheros y comprime, cpio (similar a tar y creado para ser usado con cintas) permite copiar ficheros en o desde el árbol de directorio o archivo cpio, o bien copiar estructuras completas de directorios en unidades extraíbles, dump lee el sistema de archivos directamente y no a través del propio sistema de archivos y dd permite hacer copias exactas de particiones completas lo que le permite copiar una partición para la que Linux carece de controladores del sistema de archivos.**
 
@@ -304,6 +376,9 @@
 ---
 
 ### Pregunta 5.6
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 **En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)
 El comando df puede mostrar información sobre la capacidad de almacenamiento de cada uno de los sistemas de ficheros del sistema que hayan sido montados.
@@ -321,6 +396,9 @@ Y la información visualizada será la relacionada con el sistema de fichero a d
 
 ### Pregunta 5.7
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 **Si el sistema de ficheros raíz se quedase sin nodos-i libres tendría problemas de funcionamiento. ¿Por qué?**
 
 - [x] a. Porque ni siquiera se podrían generar ficheros temporales en el sistema de ficheros, ni tan siquiera en el arranque, ficheros que aún siendo temporales también generan el correspondiente i-nodo.
@@ -335,6 +413,9 @@ Y la información visualizada será la relacionada con el sistema de fichero a d
 
 ### Pregunta 5.8
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 - [ ] a. La diferencia fundamental entre los sistemas de ficheros de tipo Ext2, Ext3 y Ext4 es que Ext2, Ext3 y Ext4 tienen el mismo formato pero Ext3 incluye extensiones para llevar un registro de los bloques de un fichero lo que resulta útil en grandes ficheros y sistemas de ficheros. Y además Ext4 incorpora journaling para poder recuperar rápidamente la consistencia tras una caída del sistema).
 - [ ] b. La diferencia fundamental entre los sistemas de ficheros de tipo Ext2, Ext3 y Ext4 es que Ext2, Ext3 y Ext4 tienen el mismo formato pero se adaptan a las nuevas tecnologías y por tanto mejoran las velocidades, tipos de drivers, tamaño de la palabra, manejan tamaños de ficheros mayores y permiten el arranque desde cualquier partición situada en cualquier disco al permitir un direccionamiento con mayor número de bits. En ningún caso permite una herramienta de defragmentación online ya que es una operación a bajo nivel no permitida con el sistema operativo arrancado a nivel 6.
 - [ ] c. La diferencia fundamental entre los sistemas de ficheros de tipo Ext2, Ext3 y Ext4 es que Ext3 tiene el mismo formato que Ext2 y es transaccional (Añade un registro o journal que permite recuperar rápidamente la consistencia tras una caída del sistema) y que Ext4 añade la posibilidad de utilizar RAID5 con lo que se define como un sistema a prueba de fallos.
@@ -346,6 +427,9 @@ Y la información visualizada será la relacionada con el sistema de fichero a d
 ---
 
 ### Pregunta 5.9
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 **Las diferencias fundamentales entre los modelos RAID* es que RAID0 divide la información en diferentes discos, RAID1 copia lo mismo (toda la información) en dos discos espejos, RAID4 divide la información en varios discos y su paridad la introduce en un disco más y RAID5 es similar a RAID4 pero con la paridad de cada unidad de información introducida en un disco diferente para equilibrar retrasos de tiempos de igual forma entre todos los discos.**
 
@@ -360,6 +444,9 @@ Y la información visualizada será la relacionada con el sistema de fichero a d
 ---
 
 ### Pregunta 5.10
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 **En cuanto al servicio de red NFS en el sistema operativo linux...
 El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según se ejecuten las siguientes opciones:
@@ -379,6 +466,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 5.11
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 - [ ] a. El directorio /sbin contiene los archivos ejecutables accesibles sólo por los usuarios, /usr contiene los archivos correspondientes a los programas y utilidades generales de los usuarios, /bin contiene los archivos ejecutables sólo accesibles por el administrador.
 - [ ] b. El directorio /tmp contiene gran parte de los temporales del sistema necesarios para el funcionamiento de muchos de los programas soportados por el sistema operativo, /media contiene los subdirectorios donde tradicionalmente se montarán los diferentes dispositivos extraíbles, /bin contiene los archivos ejecutables accesibles sólo por el administrador.
 - [x] c. El directorio /tmp contiene gran parte de los temporales del sistema necesarios para el funcionamiento de muchos de los programas soportados por el sistema operativo, /mnt contiene los subdirectorios donde tradicionalmente se montarán los diferentes dispositivos extraíbles, /media contiene los subdirectorios donde se montarán los diferentes dispositivos extraíbles en las distribuciones más actuales, /proc será un directorio virtual donde se tendrá acceso a los dispositivos no accesibles a través de los ficheros contenidos en /dev, ".." será el directorio padre de aquel en el que nos encontremos y "." el directorio actual.
@@ -390,6 +480,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 5.12
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 **En los sistemas de ficheros se permite la definición de cuotas de disco (limitar el nº de bloques y/o ficheros que un usuario/grupo puede usar por partición) y para ello, si se quiere fijar esta opción en las máquinas en explotación, se definen los límites, se parametriza en el fichero /etc/fstab añadiendo a las opciones la nueva opción usrquota, se remonta el sistema de ficheros y se ejecuta la activación de las cuotas a través de "quotaon -a". Además se deben asignar cuotas a los usuarios.**
 
@@ -405,6 +498,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 5.13
 
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
+
 **En los sistemas de ficheros se permite la definición de cuotas de disco (limitar el nº de bloques y/o ficheros que un usuario/grupo puede usar por partición) y para ello se definen dos límites. El límite hard que no puede ser superado por el usuario de ninguna forma y si lo hace ya no podrá usar más bloques o crear más ficheros. Y el límite soft que se puede sobrepasar durante cierto tiempo, pero sin llegar al límite hard. Pasado ese tiempo es como si se hubiese superado el límite hard.**
 
 - [ ] a. Ninguna de las otras respuestas es correcta.
@@ -418,6 +514,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 5.14
+
+**Apartado: 5. En cuanto a los sistemas de ficheros tipo Linux**
+
 
 - [ ] a. Los script, llamados rc* en /etc/rc.d o /etc (dependerá de las distribuciones) del modelo basado en eventos serán ejecutados por parte del kernel.
 - [x] b. Todos los script, llamados rc* en /etc/rc.d o /etc (dependerá de las distribuciones), son ejecutados por el Init mediante un modelo síncrono no basado en eventos.
@@ -433,6 +532,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 6.1
 
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
+
 - [ ] a. Dentro de esta quinta generación de computadoras se desarrolló un proyecto lanzado por Japón a finales de los 70: FGCS (Fifth Generation Computer Systems). Su objetivo era el desarrollo de una clase de computadoras que utilizarían técnicas de inteligencia artificial al nivel del lenguaje de máquina (lenguaje PROLOG) y serían capaces de resolver problemas complejos, como la traducción automática de una lengua natural a otra. No se obtuvo tal resultado.
 - [ ] b. En la quinta generación, desde los 90, los ordenadores están basados en la utilización masiva de VLSI, inteligencia artificial y sistemas expertos, procesamiento paralelo (basado en arquitectura paralela), sistemas operativos en red, simulación y creación de lenguajes de programación cercanos al lenguaje natural (PROLOG).
 - [x] c. Todas las otras respuestas son correctas.
@@ -444,6 +546,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 6.2
+
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
 
 - [x] a. En la tercera generación los ordenadores se diseñaron como sistemas para uso general y algunos de ellos soportaban modos múltiples de forma simultánea (procesos por lotes, tiempo compartido, procesamiento de tiempo real y multiprocesamiento).
 - [ ] b. En la tercera generación los ordenadores se diseñaron como sistemas para uso específico y algunos de ellos soportaban modos múltiples de forma simultánea. El uso general sólo apareció en los años 80 con la generalización del uso de ordenadores con la familia x86 y ya dentro de la cuarta generación.
@@ -457,6 +562,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 6.3
 
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
+
 - [ ] a. Los ordenadores tienen componentes hardware (discos, memoria, fuente de alimentación, ...) y software (sistemas operativos y aplicaciones de usuario).
 - [ ] b. La red puede ser sólo de área local o conectarse con el resto del mundo a través de Internet.
 - [x] c. Todas las otras respuestas son correctas.
@@ -468,6 +576,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 6.4
+
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
 
 - [x] a. Todas las otras respuestas son correctas.
 - [ ] b. Dentro de esta quinta generación de computadoras se desarrolló un proyecto lanzado por Japón a finales de los 70: FGCS (Fifth Generation Computer Systems). Su objetivo era el desarrollo de una clase de computadoras que utilizarían técnicas de inteligencia artificial al nivel del lenguaje de máquina (lenguaje PROLOG) y serían capaces de resolver problemas complejos, como la traducción automática de una lengua natural a otra. No se obtuvo tal resultado.
@@ -481,6 +592,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 6.5
 
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
+
 - [x] a. Todas las otras respuestas son correctas.
 - [ ] b. En la primera generación se diseñaron para facilitar la transición entre trabajos evitando pérdidas de tiempo entre trabajos mediante procesamiento por lotes.
 - [ ] c. En la primera generación las tarjetas perforadas sustituyeron a los tableros con conexiones modificables a mano para introducir los programas en lenguaje máquina y los datos.
@@ -492,6 +606,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 6.6
+
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
 
 - [ ] a. En la segunda generación se desarrollaron los sistemas compartidos con multiprogramación (se utilizan varios procesadores en un solo sistema computacional).
 - [ ] b. En la segunda generación se desarrollaron los sistemas compartidos con multiprocesamiento (varios programas de usuario al mismo tiempo en el almacenamiento principal y el procesador se cambia rápidamente de un trabajo a otro).
@@ -505,6 +622,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 6.7
 
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
+
 - [x] a. En la tercera generación los ordenadores se diseñaron como sistemas para uso general y algunos de ellos soportaban modos múltiples de forma simultánea (procesos por lotes, tiempo compartido, procesamiento de tiempo real y multiprocesamiento).
 - [ ] b. En la tercera generación los ordenadores se diseñaron como sistemas para uso específico y algunos de ellos soportaban modos múltiples de forma simultánea. El uso general sólo apareció en los años 80 con la generalización del uso de ordenadores con la familia x86 y ya dentro de la cuarta generación.
 - [ ] c. En la tercera generación los ordenadores se diseñaron como sistemas para uso general y algunos de ellos soportaban modos múltiples de forma simultánea (procesos por lotes, tiempo compartido y multiprocesamiento). Pero no se diseñaron en tiempo real ya que este modo de trabajo será de cuarta generación.
@@ -516,6 +636,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 6.8
+
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
 
 - [x] a. Todas las otras respuestas son correctas.
 - [ ] b. Dentro de esta quinta generación de computadoras se desarrolló un proyecto lanzado por Japón a finales de los 70: FGCS (Fifth Generation Computer Systems). Su objetivo era el desarrollo de una clase de computadoras que utilizarían técnicas de inteligencia artificial al nivel del lenguaje de máquina (lenguaje PROLOG) y serían capaces de resolver problemas complejos, como la traducción automática de una lengua natural a otra. No se obtuvo tal resultado.
@@ -529,6 +652,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 6.9
 
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
+
 - [x] a. Todas las otras respuestas son correctas.
 - [ ] b. En la primera generación se diseñaron para facilitar la transición entre trabajos evitando pérdidas de tiempo entre trabajos mediante procesamiento por lotes.
 - [ ] c. En la primera generación las tarjetas perforadas sustituyeron a los tableros con conexiones modificables a mano para introducir los programas en lenguaje máquina y los datos.
@@ -540,6 +666,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 6.10
+
+**Apartado: 6. En cuanto a las generaciones los Sistemas Operativos**
+
 
 - [ ] a. En la cuarta generación, desde mediados de los 70, los ordenadores se diseñaron de forma que incluían redes de computadores, procesamiento en línea, sistemas de seguridad y sistemas de bases de datos. Las máquinas virtuales pertenecen a la quinta generación.
 - [x] b. En la cuarta generación, desde mediados de los 70, los ordenadores se diseñaron de forma que incluían redes de computadores, procesamiento en línea, sistemas de seguridad, máquinas virtuales y sistemas de bases de datos.
@@ -554,6 +683,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ## 7. En cuanto al servicio de red SAMBA en el sistema operativo Linux
 
 ### Pregunta 7.1
+
+**Apartado: 7. En cuanto al servicio de red SAMBA en el sistema operativo Linux**
+
 
 **Contiene los paquetes:
 "samba-common" con los archivos comunes de samba utilizados para clientes y servidores.
@@ -575,6 +707,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 7.2
 
+**Apartado: 7. En cuanto al servicio de red SAMBA en el sistema operativo Linux**
+
+
 **Las secciones que se incluyen en el fichero de configuración "/etc/samba/smb.conf" determinan... [homes] [printers] cada nuevo elemento a exportar (los directorios personales, impresoras, sistemas de ficheros, ficheros,...), [print$] los controladores de impresión, [netlogon] los scripts de inicio de sesión, para almacenar archivos de Políticas de Grupo (NTConfig.POL), así como la localización de otras herramientas comunes que se puedan necesitar para el proceso de inicio de sesión, [profiles] los perfiles móviles o de escritorio de los usuarios, y [global] la parametrización general o parámetros globales del servicio, entre otros.**
 
 - [ ] a. Las secciones no tienen nada que ver con los controladores de impresión.
@@ -590,6 +725,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ## 8. En cuanto al servicio de red NIS en el sistema operativo Linux
 
 ### Pregunta 8.1
+
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
 
 **Algunos de los comandos que se ejecutan sobre NIS son:
 • yppasswd - Permite que los usuarios puedan cambiar su contraseña en el servidor NIS desde un cliente.
@@ -610,6 +748,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 8.2
 
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
+
 - [x] a. Tras cada modificación de los datos se debe ejecutar el correspondiente comando "make" en el directorio de definición de NIS ("/etc/yp") para que la modificación se distribuya automáticamente al resto de máquinas.
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. Todas las otras respuestas son incorrectas.
@@ -621,6 +762,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 8.3
+
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
 
 - [ ] a. El nombre de dominio se definirá únicamente en el fichero "/etc/yp.conf" con el formato: NISDOMAIN="aso_nis"
 - [x] b. Ninguna de las otras respuestas es correcta.
@@ -634,6 +778,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 8.4
 
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
+
 - [ ] a. Ninguna de las otras respuestas es correcta.
 - [ ] b. Las bases de datos como SQLServer, Postgresql, etc, tienen que estar definidas en un único servidor de tipo cluster que contendrá además el servidor NIS para su correcta configuración.
 - [ ] c. Las bases de datos estarán definidas en el directorio "/etc/yp" dado que todos los servicios en linux se configuran desde el directorio "/etc"
@@ -645,6 +792,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 8.5
+
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
 
 - [x] a. Tras cada modificación de los datos se debe ejecutar el correspondiente comando "make" en el directorio de definición de NIS ("/etc/yp") para que la modificación se distribuya automáticamente al resto de máquinas.
 - [ ] b. Ninguna de las otras respuestas es correcta.
@@ -658,6 +808,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 8.6
 
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
+
 - [ ] a. El nombre de dominio se definirá únicamente en el fichero "/etc/yp.conf" con el formato: NISDOMAIN="aso_nis"
 - [x] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. Los nombres de dominios a utilizar deben ser siempre en minúsculas (del tipo "inf.dasr.ubu.es") como lo son los nombres definidos mediante la estructura "nombre1.nombre2.nombre3..." en internet
@@ -669,6 +822,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 8.7
+
+**Apartado: 8. En cuanto al servicio de red NIS en el sistema operativo Linux**
+
 
 - [ ] a. Ninguna de las otras respuestas es correcta.
 - [ ] b. Las bases de datos como SQLServer, Postgresql, etc, tienen que estar definidas en un único servidor de tipo cluster que contendrá además el servidor NIS para su correcta configuración.
@@ -684,6 +840,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 9.1
 
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
+
 - [ ] a. Para crear los usuarios se puede ejecutar useradd o adduser que permitirán crear cuentas de usuario, o modificar cuentas ya existentes. Estos comandos permitirán toma los valores por defecto de /etc/default/useradd y de /home/login.defs
 - [ ] b. Para crear los usuarios se deben ejecutar necesariamente useradd o adduser que permitirán crear cuentas de usuario, o modificar cuentas ya existentes.
 - [ ] c. Para crear los usuarios se deben ejecutar necesariamente useradd o adduser que permitirán crear cuentas de usuario, o modificar cuentas ya existentes. Estos comandos permitirán toma los valores por defecto de /etc/default/useradd y de /etc/login.defs
@@ -695,6 +854,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 9.2
+
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
 
 - [ ] a. Si se quiere ejecutar una única aplicación como única opción posible para el usuario, se podrá incluir este ejecutable como última línea del fichero de definición de variables del usuario (/home/usuario/.* - dependiendo de la shell escogida) para que se ejecute cuando entre en el sistema y se salga del sistema al abandonar la aplicación.
 - [x] b. Si se quiere ejecutar una única aplicación como única opción posible para el usuario, se podrá incluir este ejecutable como shell del usuario en el fichero /etc/passwd para que se ejecute cuando entre en el sistema y se salga del sistema al abandonar la aplicación.
@@ -708,6 +870,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 9.3
 
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
+
 - [x] a. Algunos parámetros relacionados con los usuarios se definirán mediante comandos como chsh.
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. Algunos parámetros relacionados con los usuarios se definirán mediante comandos como skel.
@@ -719,6 +884,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 9.4
+
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
 
 - [ ] a. Si se quiere ejecutar una única aplicación como única opción posible para el usuario, se podrá arrancar mediante "runlevel 4" para que se ejecute el modo de arranque de usuario para luego ejecutar la aplicación en modo comando.
 - [ ] b. Si se quiere ejecutar una única aplicación como única opción posible para el usuario, se podrá incluir este ejecutable como última línea del fichero de definición de variables del usuario (/home/usuario/.* - dependiendo de la shell escogida) para que se ejecute cuando entre en el sistema y se salga del sistema al abandonar la aplicación.
@@ -732,6 +900,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 9.5
 
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
+
 - [ ] a. Las restricciones de tiempo ejecutadas mediante el comando chage (changed, minlife, maxlife, warn, inactive, expired), dan como resultado que el fichero /etc/passwd contenga líneas como: pepe:Ep6mckrOlChF:10063:0:99999:7:::.
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. Se definirán diferentes restricciones de tiempo: changed, minlife, maxlife, warn, inactive, expired (/etc/login.defs - valores por defecto). Estas restricciones se configuran mediante chage o passwd (Ex: chage -d -últ. día usuario - fecha del último cambio de password).
@@ -743,6 +914,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 9.6
+
+**Apartado: 9. En cuanto a la gestión de usuarios del sistema operativo Linux**
+
 
 - [x] a. Los ficheros fundamentales involucrados para su configuración general son: /etc/passwd - /etc/shadow - /etc/group - /etc/gshadow, y los ficheros del directorio /etc/skel.
 - [ ] b. Los ficheros fundamentales involucrados para su configuración general son: /etc/passwd - /etc/shadow - /etc/group - /etc/gshadow, y los ficheros situados en los directorios de cada uno de los usuarios con los que se define cada una de las variables del usuario (.bash_profile, .bashrc, ...).
@@ -758,6 +932,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 10.1
 
+**Apartado: 10. En cuanto a la evolución de internet**
+
+
 - [x] a. Vint Cerf, fue el creador de IP (protocolo para la interconexión de redes de paquetes) junto con Robert Khan en 1974. El PC aparece a principios de los años 1980 de la mano de IBM. Ambos elementos resultaron ser fundamentales para la expansión exponencial de los ordenadores en Internet.
 - [ ] b. Internet nació con la idea de no llegar jamás a alcanzar más de 128 ordenadores conectados.
 - [ ] c. Todas las otras respuestas son correctas.
@@ -769,6 +946,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 10.2
+
+**Apartado: 10. En cuanto a la evolución de internet**
+
 
 - [x] a. TDT (Televisión Digital Terrestre) es un servicio de transmisión de imágenes en movimiento y su sonido asociado mediante codificación binaria a través de una red de repetidores terrestres por cuya infraestructura se permite el envío de datos y por tanto, implementarse el acceso a Internet.
 - [ ] b. TDT (Televisión Digital Terrestre) en ningún caso permite el acceso a Internet puesto que la señal de televisión es continua a través del cable por lo que en ningún momento se permitirá el envío de otra información paralela.
@@ -782,6 +962,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 10.3
 
+**Apartado: 10. En cuanto a la evolución de internet**
+
+
 - [ ] a. SAT (Servicio Asíncrono de Telecomunicaciones) es un servicio de transmisión de televisión por el que se puede retransmitir desde un satélite de comunicaciones una señal de televisión emitida desde un punto de la Tierra, de forma que ésta pueda llegar a otras partes del planeta (... a grandes extensiones de terreno y distancias, independientemente de sus condiciones orográficas, por el continuo rebote de la señal en tierra y los diferentes satélites) y que por cuyos medios físicos también puede transmitirse datos y por tanto implementarse el acceso a Internet.
 - [x] b. SAT (Televisión por Satélite) es un servicio de transmisión de televisión por el que se puede retransmitir desde un satélite de comunicaciones una señal de televisión emitida desde un punto de la Tierra, de forma que ésta pueda llegar a otras partes del planeta (... a grandes extensiones de terreno y distancias, independientemente de sus condiciones orográficas, por el continuo rebote de la señal en tierra y los diferentes satélites) y que por cuyos medios físicos también puede transmitirse datos y por tanto implementarse el acceso a Internet.
 - [ ] c. SAT (Servicio Asíncrono de Telecomunicaciones) es un servicio de transmisión de televisión por el que se puede retransmitir datos y por tanto implementarse el acceso a Internet. Sin embargo no sirve para la transmisión de voz por el enorme retraso que se produce y la gran posibilidad de que se produzca cierto desorden en los envíos de datos. Evidentemente el sistema sabrá cómo reordenar los datos pero en el caso de la voz el desorden se reproducirá de inmediato como un fallo de voz.
@@ -794,6 +977,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 10.4
 
+**Apartado: 10. En cuanto a la evolución de internet**
+
+
 - [x] a. PLC (Power Line Communications) es un servicio de transmisión de energía eléctrica y que por cuyos medios físicos también puede transmitirse datos y por tanto implementarse el acceso a Internet.
 - [ ] b. PLC (Power Line Communications) es una computadora utilizada en la ingeniería automática o automatización informática, para automatizar procesos por lotes, tales como el control de las maquinas en líneas de montaje.
 - [ ] c. Ninguna de las otras respuestas es correcta.
@@ -805,6 +991,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 10.5
+
+**Apartado: 10. En cuanto a la evolución de internet**
+
 
 - [ ] a. RTB es la Red de Telefonía Basada en paquetes o red analógica mientras que ISDN es la Red Digital de Servicios Integrados o red digital. Ambas están orientadas a la comunicación de datos pero no de voz.
 - [ ] b. RTB es la Red de Telefonía Basada en paquetes o red analógica mientras que ISDN es la Red Digital de Servicios Integrados o red digital. Ambas están orientadas a la comunicación de voz pero no de datos.
@@ -820,6 +1009,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 11.1
 
+**Apartado: 11. En cuanto a las estrategias a seguir por los administradores**
+
+
 - [ ] a. El administrador no tiene por qué planear cada acción en el desempeño de sus funciones.
 - [ ] b. Todas las otras respuestas son correctas.
 - [x] c. El administrador debe conocer cómo trabaja cada elemento y probarlo, planear cada acción, hacer que estas sean reversibles y siempre de forma incremental, probar el resultado de la acción realizada, ..., antes de pasarlo a explotación.
@@ -832,6 +1024,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 11.2
 
+**Apartado: 11. En cuanto a las estrategias a seguir por los administradores**
+
+
 - [ ] a. Ninguna de las otras respuestas es correcta.
 - [ ] b. En unix no existe el grupo root sino que sólo existe como usuario. De hecho todos ellos se incluyen en un grupo "administrador" que figura en primer lugar en el fichero /etc/group.
 - [x] c. En unix cualquier usuario puede realizar acciones como si se tratara de root siempre que sea definido en el grupo "sudoers" dentro del fichero /etc/group
@@ -843,6 +1038,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 11.3
+
+**Apartado: 11. En cuanto a las estrategias a seguir por los administradores**
+
 
 - [ ] a. En unix, el usuario root podrá tener un identificador de usuario menor o igual a 10.
 - [ ] b. En unix, el usuario root tendrá un identificador de usuario menor que 1.
@@ -858,6 +1056,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 12.1
 
+**Apartado: 12. En cuanto a un usuario sin privilegios y la ejecución del comando sudo**
+
+
 - [ ] a. Las reglas contenidas en el fichero /etc/sudoers son del tipo: usuario host = comando1, comando2, ... comandoN
 - [ ] b. El comando sudo permite la ejecución del comando solicitado sin necesidad de incorporar la contraseña en algunos casos siempre que el tiempo transcurrido entre los intentos sea menor que uno parametrizado por defecto.
 - [x] c. Todas las otras respuestas son correctas.
@@ -870,6 +1071,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 12.2
 
+**Apartado: 12. En cuanto a un usuario sin privilegios y la ejecución del comando sudo**
+
+
 - [ ] a. La opción -l (--login) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
 - [ ] b. No funcionará correctamente si no está o está dañado el fichero /etc/sudoers.
 - [ ] c. La opción -c (--command) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
@@ -881,6 +1085,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 12.3
+
+**Apartado: 12. En cuanto a un usuario sin privilegios y la ejecución del comando sudo**
+
 
 - [ ] a. A través de la opción "-V" del comando sudo se podrá ver el listado de opciones parametrizadas por defecto para este comando.
 - [ ] b. A través de la opción "-c" del editor por defecto de /etc/sudoers se comprueba si el fichero está bien configurado.
@@ -896,6 +1103,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 13.1
 
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
+
 - [ ] a. En el grupo "snmp" se proporciona información relativa a las estadísticas sobre paquetes SNMP enviados y recibidos pero nada tiene que ver con los errores en la sintaxis ASN.1.
 - [ ] b. Todas la otras respuestas son correctas.
 - [ ] c. En el grupo "snmp" se proporciona información relativa a las estadísticas sobre paquetes SNMP enviados y recibidos, errores a través de las TRAPs... pero nada tiene que ver con los errores en la sintaxis ASN.1.
@@ -907,6 +1117,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 13.2
+
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
 
 - [ ] a. No es cierto. De hecho el texto correcto sería: En el grupo ip se proporciona información relativa al funcionamiento del protocolo IP, la tabla de direccionamiento o de encaminamiento, o la tabla de traducción de direcciones.
 - [ ] b. Ninguna de las otras opciones es correcta.
@@ -920,6 +1133,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 13.3
 
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
+
 - [ ] a. En el grupo "transmisión" se proporciona información relativa al protocolo de transmisión utilizado para conectar cada interfaz del sistema por ejemplo IEEE 802.4 Token Bus, IEEE 802.5 Token Ring FDDI, Ethernet, etc.
 - [x] b. El grupo "transmisión" no existe.
 - [ ] c. Ninguna de las otras opciones es correcta.
@@ -932,6 +1148,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 13.4
 
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
+
 - [ ] a. El texto es correcto. De hecho se incluyen datos como: ifIndex, ifDescr, ifType, ifMTU, ifPhysAddress, ifSpeed, ifAdminStatus, ifOperStatus
 - [ ] b. El texto es correcto. De hecho se incluyen datos como: ifAdminStatus, ifOperStatus. "ifAdminStatus" determinará el estado deseado mientras que "ifOperStatus" determinará el estado real en el que se encuentra el dispositivo.
 - [ ] c. El texto es correcto. De hecho se incluyen datos como el índice de cada interfaz, la descripción textual, el tipo de hardware que hay bajo la capa de red, el tamaño de MTU para el interfaz, la dirección física del interfaz o el ancho de banda utilizado por el interfaz.
@@ -943,6 +1162,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 13.5
+
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
 
 **La RFC que trata sobre la MIB-II (1213) subdivide la información de gestión de la red en diversos nodos entre los que se encuentran: RMON, SNMP, TRANSMISIÓN, EGP, UDP, TCP, ICMP, IP, AT, Interfaces o System**
 
@@ -957,6 +1179,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 13.6
+
+**Apartado: 13. En cuanto a la MIB dentro de la gestión de red en el modelo SNMP**
+
 
 **En el grupo tcp se proporciona información relativa la configuración del protocolo, estadísticas de conexiones (activas, pasivas, intentos fallidos de conexión...) y estadísticas sobre envío y recepción de segmentos.**
 
@@ -974,6 +1199,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 14.1
 
+**Apartado: 14. En cuanto a los elementos de un sistema**
+
+
 - [ ] a. Los ordenadores tienen componentes hardware (discos, memoria, fuente de alimentación, ...) y software (sistemas operativos y aplicaciones de usuario).
 - [ ] b. La red puede ser sólo de área local o conectarse con el resto del mundo a través de Internet.
 - [x] c. Todas las otras respuestas son correctas.
@@ -986,6 +1214,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 14.2
 
+**Apartado: 14. En cuanto a los elementos de un sistema**
+
+
 - [ ] a. En el enunciado se produce un error ya que la asignación de nombres y direcciones (DNS), se realiza por parte de la IANA (organismo para la distribución de direcciones IPv4 y que determinará por tanto la equivalencia con los nombres a través de los servidores DNS).
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [x] c. La gestión de red se refiere a la parametrización para su uso desde las aplicaciones de terceros, al uso de sistemas de monitorización para el hardware de red (SNMP), a nivel de aplicación, al uso de sistemas de directorio para el control de usuarios (NIS), asignación de nombres y direcciones (DNS), etc. En ningún caso se referirá al diseño de la topología de la red teniendo en consideración aspectos de seguridad y de hardware, ya que será realizado por analistas de red o en todo caso, analistas de sistemas.
@@ -997,6 +1228,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 14.3
+
+**Apartado: 14. En cuanto a los elementos de un sistema**
+
 
 - [ ] a. La gestión de usuarios se refiere a gestionar las altas, bajas y modificaciones de la información de los usuarios, controlará los permisos y niveles de acceso y realizará el soporte técnico sobre la formación, documentación y gestión de incidencias. En ningún caso determinará si se permite o no a los usuarios gestionar sus propios equipos. La funcionalidad a desarrollar por los usuarios no estará determinada por los administradores informáticos sino por los responsables de los diferentes departamentos a los que pertenezcan.
 - [x] b. La gestión de usuarios se refiere a decidir si se debe controlar el uso de usuarios locales y si se permite o no a los usuarios gestionar sus propios equipos. Para ello, el administrador gestionará las altas, bajas y modificaciones de la información de los usuarios, controlará los permisos y niveles de acceso y realizará el soporte técnico sobre la formación, documentación y gestión de incidencias.
@@ -1012,6 +1246,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 15.1
 
+**Apartado: 15. En cuanto a los estándares internacionales asociados a las comunicaciones de datos**
+
+
 - [ ] a. IRTF (Internet Research Task Force – Fuerza de trabajo de investigación de Internet) formada para resolver problemas a corto plazo). Publica las RFC (Request For Comment) IETF (Internet Engineering Task Force – Fuerza de trabajo de ingenieros de Internet) formada para resolver problemas a largo plazo).
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. IRTF (Internet Research Task Force – Fuerza de trabajo de investigación de Internet) formada para resolver problemas a corto plazo). IETF (Internet Engineering Task Force – Fuerza de trabajo de ingenieros de Internet) formada para resolver problemas a largo plazo).
@@ -1023,6 +1260,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 15.2
+
+**Apartado: 15. En cuanto a los estándares internacionales asociados a las comunicaciones de datos**
+
 
 - [ ] a. Los pasos del proceso de estandarización incluyen: Draft Standard, Proposed Standard→Draft Standard, Cuando el desarrollo tiene un cierto éxito en su uso (pasando a tener el status de Internet Standard)
 - [ ] b. Los pasos del proceso de estandarización incluyen: Proposed Standard, Cuando el desarrollo tiene un cierto éxito en su uso (pasando a tener el status de Internet Standard)
@@ -1038,6 +1278,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 16.1
 
+**Apartado: 16. En cuanto a la gestión de red**
+
+
 - [ ] a. La gestión basada en el modelo de Internet se conoce de forma general como modelo SNMP y se basa en el protocolo SNMP (Simple Network Management Protocol).
 - [x] b. Todas las otras respuestas son correctas.
 - [ ] c. Los bloques funcionales de TMN son el bloque funcional del sistema de operaciones (OSF), de elemento de red (NEF), de adaptador Q (QAF), de mediación (MF) y de estación de trabajo (WSF). Sin embargo en SNMP hay cinco grandes áreas funcionales: Gestión de Fallos, Gestión de Configuración, Gestión de Contabilidad, Gestión de Prestaciones y Gestión de Seguridad.
@@ -1052,6 +1295,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 17.1
 
+**Apartado: 17. En cuanto a la seguridad de las comunicaciones**
+
+
 - [x] a. Se identificarán los activos a proteger, se implantarán medidas para protegerlos, se evaluarán los riesgos, se determinarán los niveles de confianza, se hará uso de los sistemas de control de acceso y de detección y corrección de errores redundantes, se determinarán las respuestas ante los ataques (preventivas y reactivas), los sistemas de monitorización y la regulación pertinente, se validarán los supuestos previamente diseñados y se evitarán las dependencias e inconsistencias innecesarias.
 - [ ] b. Se identificarán los activos y los riesgos, se determinarán las respuestas ante los ataques (preventivas y reactivas), los sistemas de monitorización y la regulación pertinente y se harán las pruebas de seguridad previamente diseñados.
 - [ ] c. Se implantarán medidas para proteger los activos, se evaluarán los riesgos, se determinarán los niveles de confianza, se hará uso de los sistemas de control de acceso y de detección y corrección de errores redundantes, se determinarán las respuestas ante los ataques (preventivas y reactivas), los sistemas de monitorización y la regulación pertinente, se validarán los supuestos previamente diseñados y se evitarán las dependencias e inconsistencias innecesarias. Pero en ningún caso incluye la identificación de los activos a proteger ya que son responsabilidad del departamento de compras, quienes deben suministrar el inventario de recursos existentes, que los administradores no tienen por qué conocer.
@@ -1063,6 +1309,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 17.2
+
+**Apartado: 17. En cuanto a la seguridad de las comunicaciones**
+
 
 - [ ] a. Se implantarán políticas de seguridad para obtener la confidencialidad (en una conversación los mensajes sólo pueden ser generados por los interlocutores autorizados), la integridad (los medios necesarios para la conversación deben estar garantizados para su uso por parte de los usuarios autorizados) y la disponibilidad (en una conversación sólo los interlocutores autorizados podrán participar en la misma)
 - [ ] b. Se implantarán políticas de seguridad para obtener la confidencialidad (los medios necesarios para la conversación deben estar garantizados para su uso por parte de los usuarios autorizados), la integridad (en una conversación sólo los interlocutores autorizados podrán participar en la misma) y la disponibilidad (en una conversación los mensajes sólo pueden ser generados por los interlocutores autorizados)
@@ -1078,6 +1327,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 18.1
 
+**Apartado: 18. En cuanto al arranque upstart**
+
+
 - [ ] a. Los eventos ejecutados desde el demonio Init determinan qué tarea ejecutar, cuándo y cómo, mediante comandos python. Las tareas asíncronas serán arrancadas por tanto desde el Init en un modo asíncrono como consecuencia de su ejecución mediante lenguajes de altas prestaciones.
 - [ ] b. Es un arranque secuencial síncrono definido a través del proceso Init en el que cada tarea debe arrancarse a través de la orden initctl(start / stop).
 - [x] c. El directorio /etc/event.d/ (dependiente de la distribución) contiene una serie de ficheros (representando los eventos) que determinan qué tarea ejecutar, cuándo y cómo, mediante un lenguaje descriptivo propio.
@@ -1089,6 +1341,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 18.2
+
+**Apartado: 18. En cuanto al arranque upstart**
+
 
 - [ ] a. Es un modo asíncrono de arranque ya que pueden arrancarse diferentes elementos en cualquier momento, una vez arrancado el sistema.
 - [ ] b. Es un arranque en el que cada tarea no se inicia hasta que la tarea anterior no termina positivamente o negativamente (por timeout o denegación de servicio).
@@ -1104,6 +1359,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 19.1
 
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
+
 **El comando vmstat muestra información sobre la memoria virtual, mostrados de forma periódica. Vmstat permite ordenar los procesos según el porcentaje de uso de la CPU, filtrarlos por PID para ver sólo algunos de los procesos especificando los PIDs en el comando, etc. Y la información visualizada será la relacionada con los procesos, la memoria, la paginación, la Entrada/Salida, el sistema (interrupciones e intercambios de contexto) y la CPU.**
 
 - [ ] a. No es cierto porque el comando no se llama vmstat sino vpstat.
@@ -1118,6 +1376,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 19.2
 
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
+
 - [ ] a. Comandos como uptime (relacionado con la configuración de la hora actual), pstree (relacionado con la visualiza un árbol de los procesos en ejecución y los recursos de CPU utilizados en cada caso) o ps (relacionado con la visualización de la información sobre los procesos en ejecución) resultan interesantes para poder verificar el correcto funcionamiento del sistema.
 - [ ] b. Comandos como uptime (relacionado con la configuración de la hora actual), pstree (relacionado con la visualiza un árbol de los procesos en ejecución) o ps (relacionado con la visualización de la información sobre los procesos en ejecución) resultan interesantes para poder verificar el correcto funcionamiento del sistema.
 - [x] c. Comandos como uptime (relacionado con la visualización del tiempo que lleva arrancado el sistema), pstree (relacionado con la visualiza un árbol de los procesos en ejecución) o ps (relacionado con la visualización de la información sobre los procesos en ejecución) resultan interesantes para poder verificar el correcto funcionamiento del sistema.
@@ -1129,6 +1390,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 19.3
+
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
 
 **El comando du puede mostrar información sobre la cantidad de espacio de disco utilizado por un directorio, los ficheros que hay en él y todos sus subdirectorios. Y la información visualizada será la relacionada con el tamaño del elemento (fichero o directorio) y el nombre del elemento.**
 
@@ -1144,6 +1408,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 19.4
 
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
+
 **El comando mpstat muestra estadísticas del procesador (o procesadores) junto con la media global de todos los datos mostrados de forma periódica. Mpstat permite ordenar los procesos según el porcentaje de uso de la CPU, filtrarlos por PID para ver sólo algunos de los procesos especificando los PIDs en el comando, etc. Y la información visualizada será entre otras, CPU, %user, %nice, %sys, %iowait, %irq, %idle, etc.**
 
 - [x] a. No es cierta porque mpstat no permite ningún tipo de orden, ni trata en absoluto sobre los procesos, ni permite ningún tipo de filtrado.
@@ -1157,6 +1424,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 19.5
+
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
 
 **El comando df puede mostrar información sobre la capacidad de almacenamiento de cada uno de los sistemas de ficheros del sistema que hayan sido montados. Y la información visualizada será la relacionada con el sistema de fichero a detallar, el número de bloques de 1k de cada sistema de ficheros, cuántos estén usados, cuántos disponibles, el porcentaje de bloques usados respecto al total y el directorio de montaje.**
 
@@ -1172,6 +1442,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 19.6
 
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
+
 **El comando free muestra información sobre la memoria virtual, mostrados de forma periódica. free permite ordenar los procesos según el porcentaje de uso de la CPU, filtrarlos por PID para ver sólo algunos de los procesos especificando los PIDs en el comando, etc. Y la información visualizada será la relacionada con la cantidad total de memoria RAM, la cantidad total de memoria utilizada por el sistema, la cantidad de memoria libre y la cantidad de memoria utilizada de forma compartida entre varios programas para la compartición de datos.**
 
 - [ ] a. Todas las otras respuestas son correctas.
@@ -1185,6 +1458,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 19.7
+
+**Apartado: 19. En cuanto al control y gestión de la actividad de los recursos del sistema operativo linux (CPU, memoria, ...)**
+
 
 **El comando top muestra la actividad dinámica del procesador en tiempo real según intervalos de tiempo. Admite la posibilidad de usar un interfaz interactivo limitado para la manipulación de procesos y mucho más extenso para su configuración. Top permite ordenar los procesos según el porcentaje de uso de la CPU, filtrarlos por PID para ver sólo algunos de los procesos especificando los PIDs en el comando, etc. Y la información visualizada será entre otras, PID, PPID, UID, USER, GROUP, TTY, PR, NI, %CPU, TIME, %MEM, SWAP, etc.**
 
@@ -1202,6 +1478,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 20.1
 
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
+
 **Toda distribución de SNMPv3 estará compuesto por todos o algunos de los siguientes módulos: Dispatcher, Message Processing Subsystem, Security Subsystem, Access Control Subsystem**
 
 - [ ] a. El Message Processing Subsystem prepara los mensajes para que sean enviados, agregando la cabecera correspondiente a la versión necesaria y extrae los datos de los mensajes recibidos. Está compuesto por al menos un Modelo de Procesamiento de mensajes ya que puede haber un Modelo de Procesamiento de Mensajes para cada versión de protocolo necesario en la red. Además interactúa con el subsistema de seguridad para lograr la encriptación o desencriptación de los datos que la necesiten.
@@ -1215,6 +1494,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 20.2
+
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
 
 **Toda distribución de SNMPv3 estará compuesto por todas o algunas de los siguientes aplicaciones que interaccionan con el motor SNMP para enviar y recibir mensajes, enviar y recibir respuestas o enviar y recibir mensajes asíncronos: Generador de comandos, Respondedor de Comandos, Receptor de notificaciones, Generador de notificaciones, Proxy Forwarder,...**
 
@@ -1230,6 +1512,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 20.3
 
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
+
 - [ ] a. En los mensajes de SNMPv1 el campo "Enterprise" representa el nombre del objeto que genera la Trap (valor del sysObjectID).
 - [ ] b. En los mensajes de SNMPv1 el campo "Generic Trap" representa el tipo de Trap genérico y el campo "Specific Trap" representa el código de Trap específico.
 - [x] c. Todas las otras respuestas son correctas.
@@ -1241,6 +1526,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 20.4
+
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
 
 **Hay 7 traps definidas en la versión SNMPv1: coldStart, warmStart, linkDown, linkUp, authenticationFailure, egpNeighborLoss, enterpriseSpecific**
 
@@ -1256,6 +1544,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 20.5
 
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
+
 - [ ] a. La versión SNMPv2 estaba limitada por un único problema para el envío de órdenes y de datos que suponía una gran sobrecarga en las transferencias de datos. Esto se debía a que los envíos de datos debían hacerse como respuesta a una petición específica por lo que para cada envío de datos tenía que venir precedido el paquete de petición de datos de cada nodo con la consiguiente sobrecarga.
 - [ ] b. La versión SNMPv2 estaba limitada tanto por sobrecargas como por seguridad. De hecho, ni se podían mandar todos los datos de golpe lo que suponía tener que sobrecargar la red con multitud de envíos, ni se podía autenticar un usuario para una vista determinada de la MIB en el agente.
 - [x] c. La versión SNMPv2 estaba limitada por sus problemas de seguridad al tener como mecanismo de autenticación una única clave llamada Nombre de Comunidad.
@@ -1267,6 +1558,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 20.6
+
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
 
 **Los tipos de mensajes en SNMP1 son: GetRequest, GetNextRequest, SetRequest, GetResponse, Trap**
 
@@ -1281,6 +1575,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 20.7
+
+**Apartado: 20. En cuanto al modelo de gestión SNMP**
+
 
 **El subsistema de seguridad contempla dos niveles de seguridad: Sin autenticación ni privacidad (noauthNoPriv) por la que no se provee de seguridad al mensaje y se comporta como un sistema equivalente a SNMPv1 y con autenticación y privacidad (authPriv).**
 
@@ -1297,6 +1594,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 21.1
 
+**Apartado: 21. En cuanto al control y gestión de los dispositivos de entrada/salida del sistema operativo linux**
+
+
 **El comando sar visualiza estadísticas sobre la actividad del sistema (CPU, discos, memoria, dispositivos de red, ...). Y la información visualizada será entre otras, el número de peticiones de lectura por segundo, el número peticiones de escritura por segundo, los sectores/seg leídos de un dispositivo (512 bytes) y los sectores/sg escritos.**
 
 - [ ] a. Ninguna de las otras respuestas es correcta.
@@ -1310,6 +1610,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 21.2
+
+**Apartado: 21. En cuanto al control y gestión de los dispositivos de entrada/salida del sistema operativo linux**
+
 
 **El comando iostat visualiza estadísticas sobre la CPU y los dispositivos y particiones de entrada/salida. Y la información visualizada será entre otras, el número de transferencias por segundo, el número de bloques leídos por segundo, el número de bloques escritos por segundo el número total de bloques leídos y el número total de bloques escritos.**
 
@@ -1327,6 +1630,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 22.1
 
+**Apartado: 22. En cuanto a los parámetros de servicio**
+
+
 - [x] a. Se consideran prestaciones a la cadencia efectiva, el retardo de tránsito y la tasa residual de fallos. Y se consideran parámetros de calidad de servicio a la cadencia efectiva, al retardo de tránsito, a la tasa residual de fallos y a la disponibilidad.
 - [ ] b. Se considera calidad a la cadencia efectiva, el retardo de tránsito y la tasa residual de fallos y a la disponibilidad y se consideran parámetros de prestación de servicio a la cadencia efectiva, al retardo de tránsito, a la tasa residual de fallos.
 - [ ] c. Se consideran prestaciones a la cadencia efectiva, el retardo de tránsito y la tasa residual de fallos y a la disponibilidad. Y se consideran parámetros de calidad de servicio a la cadencia efectiva, al retardo de tránsito, a la tasa residual de fallos.
@@ -1340,6 +1646,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ## 23. En cuanto a la gestión de red en el modelo SNMP
 
 ### Pregunta 23.1
+
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
 
 **Está basado en una arquitectura cliente/servidor, implementado como gestores/agentes, donde la información será estática, dinámica y estadística y será enviada como mensajes a través del protocolo de aplicación SNMP.**
 
@@ -1355,6 +1664,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 23.2
 
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
+
 - [ ] a. Las RFCs (Requests Of Comments) sólo determinan de forma única todo cuanto debe ser definido, relacionado con el modelo SNMP.
 - [x] b. Las RFCs definen los estándares relacionados con la red de Internet. Sin embargo sólo un subconjunto de ellos están directamente relacionados con SNMP.
 - [ ] c. Ninguna de las otras opciones es correcta.
@@ -1366,6 +1678,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 23.3
+
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
 
 **Se desarrolla a través de cuatro elementos fundamentales: Un protocolo para especificar el intercambio de datos entre agentes y gestores, una especificación de la estructura de la base de datos, un conjunto de objetos de datos y un complemento como es la extensión para la monitorización de las LAN.**
 
@@ -1381,6 +1696,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 23.4
 
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
+
 - [ ] a. Las Reglas de codificación básicas, o BER (Basic Encoding Rules), incluye uno de los formatos de codificación definidos como parte del estándar SNMP: ASN.1.
 - [ ] b. La sintaxis BER, junto con Canonical Encoding Rules (CER) son los dos subconjuntos de Distinguished Encoding Rules (DER) para la codificación de datos SNMP a enviar sobre UDP como sintaxis de transferencia entre entidades SNMP.
 - [ ] c. Ninguna de las otras respuestas son correctas.
@@ -1392,6 +1710,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 23.5
+
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
 
 - [ ] a. Los siguientes tipos de datos son manejados por el modelo SNMP: Números enteros, secuencias de bytes, identificadores de objetos, estructuras y arrays unidimensionales, etc.
 - [ ] b. Las tablas en la MIB se definen a través de un tipo de dato específico como es "sequence" o "sequence of"
@@ -1405,6 +1726,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 23.6
 
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
+
 - [ ] a. Las operaciones a ejecutar sobre las tablas se referirán a entradas individuales.
 - [ ] b. Las operaciones a ejecutar sobre las tablas podrán hacerse mediante un accesos secuencial.
 - [ ] c. La instancia de un objeto escalar se generará añadiendo un "0" al identificador del objeto.
@@ -1416,6 +1740,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 23.7
+
+**Apartado: 23. En cuanto a la gestión de red en el modelo SNMP**
+
 
 - [ ] a. Los siguientes tipos de datos son manejados por el modelo SNMP: Números enteros, secuencias de bytes, identificadores de objetos, estructuras y arrays unidimensionales, etc.
 - [ ] b. Las tablas en la MIB se definen a través de un tipo de dato específico como es "sequence" o "sequence of"
@@ -1431,6 +1758,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 24.1
 
+**Apartado: 24. En cuanto a la monitorización remota RMON del modelo de gestión SNMP**
+
+
 **En el grupo "alarm" se definen un conjunto de umbrales sobre el rendimiento de la red. La única tabla que contiene define la variable a monitorizar, cierta información de control del proceso de muestreo y el valor de muestreo más reciente.**
 
 - [ ] a. Es correcto. Además los nodos incluidos en cada entrada de la tabla contiene información como alarmStartupAlarm, risingAlarm, fallingAlarm, risingOrFallingAlarm, alarmRisingThreshold, alarmFallingThreshold, alarmRisingEventIndex, alarmFallingEventIndex, ...
@@ -1444,6 +1774,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 24.2
+
+**Apartado: 24. En cuanto a la monitorización remota RMON del modelo de gestión SNMP**
+
 
 **La información que se obtiene con la MIB-II sin extensiones es local a cada dispositivo gestionado y proporciona información sobre el tráfico global en una red. Por tanto los monitores remotos obtendrán la información de su subred de forma local para, entre todos los monitores remotos obtener una visión global de la red.**
 
@@ -1461,6 +1794,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 25.1
 
+**Apartado: 25. En cuanto al envío de mensajes mediante las herramientas del sistema**
+
+
 - [ ] a. "mesg" sirve para habilitar/deshabilitar la llegada de mensajes a los usuarios
 - [ ] b. "talk" sirve para conversar con un usuario, incluso pero sólo en la máquina Linux/Unix local pero a través del terminal TTY
 - [x] c. "wall" (similar a write) sirve para enviar un mensaje a todos los usuarios en el sistema y a través de todas las TTYs (broadcast)
@@ -1472,6 +1808,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 25.2
+
+**Apartado: 25. En cuanto al envío de mensajes mediante las herramientas del sistema**
+
 
 - [x] a. El fichero /etc/motd contiene el mensaje del día que se imprime justo después de entrar al sistema, el fichero $HOME/.hushlogin permite evitar el mensaje del día, y el fichero /etc/issue contiene el mensaje que se muestra antes del login (normalmente muestra las versiones de Linux y núcleo instaladas)
 - [ ] b. El fichero $HOME/.hushlogin contiene el mensaje del día que se imprime justo después de entrar al sistema, el fichero /etc/issue permite evitar el mensaje del día, y el fichero /etc/motd contiene el mensaje que se muestra antes del login (normalmente muestra las versiones de Linux y núcleo instaladas)
@@ -1487,6 +1826,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 26.1
 
+**Apartado: 26. En cuanto al servicio de red NFS en el sistema operativo linux**
+
+
 **El montaje en los clientes se hace a través del comando: $ mount -t nfs -o opciones_nfs 191.168.6.10:/home /datos**
 
 - [ ] a. El comando es correcto, entre otras cosas porque la opción "-t nfs" y "191.168.6.10:/home /datos" determinan las opciones que no son por defecto por lo que tomará el resto de opciones de las opciones por defecto que se determinan según "-o opciones_nfs".
@@ -1501,6 +1843,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 26.2
 
+**Apartado: 26. En cuanto al servicio de red NFS en el sistema operativo linux**
+
+
 **La ejecución del fichero "/usr/sbin/exportfs" actualiza la información de los SF exportados y la muestra. Para ello hace un "restart" de los demonios "rpc.nfsd" y "rpc.mount". Sus opciones son: -a, -r, -u, -v**
 
 - [ ] a. La ejecución del fichero "/usr/sbin/exportfs" actualiza la información de los SF exportados y la muestra. Para ello hace un "restart" del demonio "rpc.nfsd". Sus opciones son las descritas en la pregunta pero se añade además la posibilidad de definición de nuevos usuarios mediante el mapeo de usuarios entre las máquinas clientes y el servidor, entre otras.
@@ -1514,6 +1859,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 26.3
+
+**Apartado: 26. En cuanto al servicio de red NFS en el sistema operativo linux**
+
 
 **El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según se ejecuten las siguientes opciones: -a, -d, -e**
 
@@ -1531,6 +1879,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 27.1
 
+**Apartado: 27. En cuanto al modo multiusuario**
+
+
 - [ ] a. Ninguna de las otras opciones es correcta.
 - [x] b. Es uno de los niveles: 0: El sistema está apagado, 1, s ó S: Modo monousuario, 2: Multiusuario sin funciones de red, 3: Multiusuario completo con terminales en modo texto, 4: Multiusuario completo con terminales en modo texto y uno en modo gráfico, 5: Multiusuario con pantalla de inicio de sesión basada en X, 6: El sistema se está reiniciando
 - [ ] c. Se puede utilizar cualquiera de los niveles de arranque.
@@ -1542,6 +1893,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 27.2
+
+**Apartado: 27. En cuanto al modo multiusuario**
+
 
 - [ ] a. Ninguna de las otras opciones es correcta.
 - [ ] b. Sólo se chequea el sistema de ficheros raíz de forma automática cuando haya habido algún problema en la parada del sistema anterior.
@@ -1557,6 +1911,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 28.1
 
+**Apartado: 28. En cuanto al control y gestión de la actividad de la shell del sistema operativo linux**
+
+
 - [ ] a. El comando ulimit permite controlar los recursos disponibles para una shell y los procesos lanzados por esa shell. Se define un límite para cada parámetro y el sistema restringirá el uso del recurso por parte de la shell que alcance ese límite. El fichero de configuración de los límites será "/etc/limits.conf".
 - [x] b. El comando ulimit permite controlar los recursos disponibles para una shell y los procesos lanzados por esa shell. Se define un límite para cada parámetro y el sistema restringirá el uso del recurso por parte de la shell que alcance ese límite. El fichero de configuración de los límites será "/etc/security/limits.conf".
 - [ ] c. El comando ulimit permite controlar los recursos disponibles para una shell y los procesos lanzados por esa shell. La opción "-S" permite cambiar y visualizar el límite blando asociado con los recursos, y "-H" el límite duro. El límite blando es el valor que el kernel hace cumplir para el recurso correspondiente. El límite duro actúa como techo para el límite blando.
@@ -1571,6 +1928,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 29.1
 
+**Apartado: 29. En cuanto a las generaciones del hardware de los sistemas**
+
+
 - [x] a. La evolución del hardware incluyen válvulas (primera generación), transistores (segunda generación), circuitos integrados (tercera generación) y circuitos integrados de gran y muy gran escala (cuarta generación).
 - [ ] b. Ninguna de las otras respuestas es correcta.
 - [ ] c. La evolución del hardware incluyen válvulas (primera generación), transistores (segunda generación), circuitos integrados (tercera generación), circuitos integrados de gran escala (cuarta generación) y muy gran escala (quinta generación).
@@ -1582,6 +1942,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 29.2
+
+**Apartado: 29. En cuanto a las generaciones del hardware de los sistemas**
+
 
 - [ ] a. Cada nueva generación de hardware ha ido acompañada de enormes aumentos en el coste, prestaciones, difusiones de calor y de velocidad y capacidad.
 - [ ] b. Cada nueva generación de hardware ha ido acompañada de enormes reducciones en el coste, tamaño, emisión de calor y consumo de energía, de velocidad y capacidad.
@@ -1596,6 +1959,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ## 30. En cuanto a las copias de seguridad en el sistema operativo Linux
 
 ### Pregunta 30.1
+
+**Apartado: 30. En cuanto a las copias de seguridad en el sistema operativo Linux**
+
 
 **La diferencia fundamental entre tar, cpio, dump y dd a la hora de hacer copias de seguridad es que tar agrupa ficheros y comprime, cpio (similar a tar y creado para ser usado con cintas) permite copiar ficheros en o desde el árbol de directorio o archivo cpio, o bien copiar estructuras completas de directorios en unidades extraíbles, dump lee el sistema de archivos directamente y no a través del propio sistema de archivos y dd permite hacer copias exactas de particiones completas lo que le permite copiar una partición para la que Linux carece de controladores del sistema de archivos.**
 
@@ -1613,6 +1979,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 31.1
 
+**Apartado: 31. En cuanto a la zona de intercambio del sistema operativo linux**
+
+
 - [ ] a. Se debe montar antes de arrancar el sistema operativo ya que será la zona intermedia utilizada como zona de intercambio entre el disco cuya partición contiene el sistema operativo a arrancar y la memoria donde se situará el sistema de ficheros del sistema.
 - [ ] b. También llamado initrd es el sistema de ficheros temporal utilizado para el arranque del sistema operativo.
 - [x] c. Es el área que se usa para almacenar temporalmente los procesos cuando no caben en memoria. Su presencia no es obligatoria pero junto con la paginación permite la implementación de la memoria virtual con lo que mejora el rendimiento de la memoria física del sistema.
@@ -1624,6 +1993,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 31.2
+
+**Apartado: 31. En cuanto a la zona de intercambio del sistema operativo linux**
+
 
 - [ ] a. Se definirán en el fichero /etc/fstab con los parámetros necesarios: /dev/sda2 none swap defaults 0 0
 - [ ] b. Se activan mediante el comando similar a "swapon /dev/sdc1".
@@ -1639,6 +2011,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 32.1
 
+**Apartado: 32. En cuanto al modo monousuario**
+
+
 - [ ] a. La ejecución de "Ctrl+D" producirá la ejecución del nivel de arranque por defecto, reiniciando el sistema hasta el arranque por defecto.
 - [ ] b. La ejecución de "Ctrl+D" producirá la parada ordenada del sistema.
 - [ ] c. La ejecución de "Ctrl+D" producirá la ejecución del nivel de arranque por defecto, parando todos los procesos del sistema hasta el arranque por defecto.
@@ -1652,6 +2027,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ## 33. En cuanto al protocolo SNMP dentro de la gestión de red en el modelo SNMP
 
 ### Pregunta 33.1
+
+**Apartado: 33. En cuanto al protocolo SNMP dentro de la gestión de red en el modelo SNMP**
+
 
 **El modelo se basa en un protocolo a través del cual se tiene acceso desde el puerto 161 del gestor para leer y escribir objetos escalares en la MIB de un agente y desde el puerto 162 del mismo gestor para emitir las notificaciones.**
 
@@ -1667,6 +2045,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 33.2
 
+**Apartado: 33. En cuanto al protocolo SNMP dentro de la gestión de red en el modelo SNMP**
+
+
 - [ ] a. Los dispositivos proxy o sistemas delegados permitirán la comunicación entre dos gestores.
 - [ ] b. Los dispositivos proxy son los encargados de realizar la conversión de protocolos de SNMPv3 a SNMPv1.
 - [x] c. Los dispositivos proxy convertirán, por ejemplo, cada petición enviada por la estación de gestión al agente proxy de tal forma que los parámetros enviados mediante un primer protocolo serán modificados para ser compatibles con los correspondientes a un segundo protocolo de gestión que sea usado por el dispositivo gestionado.
@@ -1681,6 +2062,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 34.1
 
+**Apartado: 34. En cuanto al control y gestión de señales del sistema operativo linux**
+
+
 - [ ] a. El comando kill sirve no solo para matar o terminar procesos sino principalmente para enviar señales a los procesos. La señal por defecto cuando no se indica ninguna es matar el proceso, y la sintaxis es kill PID. Y las señales van de 1 (matar el proceso) a 9 (releer sus archivos de configuración estando en ejecución).
 - [ ] b. El comando sigsend sirve para enviar señales a los procesos. La señal por defecto cuando no se indica ninguna es matar el proceso, y la sintaxis es kill PID. Y las señales más comunes son la 19 y 20 que detienen momentáneamente la ejecución de un proceso o programa, 18 la continua, 1 que es la señal de hang up que obliga al proceso a releer sus archivos de configuración estando en ejecución y 9 que termina rotundamente un proceso.
 - [ ] c. El comando kill sirve no solo para matar o terminar procesos sino principalmente para enviar señales a los procesos. La señal por defecto cuando no se indica ninguna es matar el proceso, y la sintaxis es kill PID. Y las señales van de 1 (releer sus archivos de configuración estando en ejecución) a 9 (matar el proceso).
@@ -1692,6 +2076,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 ---
 
 ### Pregunta 34.2
+
+**Apartado: 34. En cuanto al control y gestión de señales del sistema operativo linux**
+
 
 **Los principios básicos de la administración de sistemas incluyen...**
 
@@ -1707,6 +2094,9 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 ### Pregunta 34.3
 
+**Apartado: 34. En cuanto al control y gestión de señales del sistema operativo linux**
+
+
 **En cuanto al control y gestión de los procesos por lotes del sistema operativo linux... El comando at ejecuta órdenes a una determinada hora. Puede recibir como parámetro un fichero de texto con las órdenes a ejecutar y puede recibir las órdenes a ejecutar desde teclado, a través de un prompt especial. El comando atq permite consultar la lista de órdenes, el comando atrm, eliminar órdenes, el comando cron ejecuta tareas periódicamente y el comando crontab establece las tareas a ejecutar.**
 
 - [ ] a. Ninguna de las otras respuestas es correcta.
@@ -1716,7 +2106,3 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 - [ ] e. Los comandos cron y crontab nada tienen que ver con el procesamiento por lotes ya que son los demonios de otros dos servicios de igual nombre.
 
 **✓ Solución: b)**
-
----
-
-*Nota: El documento continúa con más preguntas pero alcanzamos el límite de caracteres. Este formato proporciona una estructura clara y fácil de seguir para estudiar las preguntas y sus respuestas correctas.*
