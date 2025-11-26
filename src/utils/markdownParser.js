@@ -14,14 +14,16 @@ export const parseMarkdownQuestions = (markdown) => {
 
   lines.forEach((line) => {
     const trimmedLine = line.trim();
-    if (!trimmedLine) return;
+
+    // We don't skip empty lines immediately because they might be part of a code block or paragraph.
+    // However, if we haven't started a question yet, we can ignore them.
 
     if (isHeader(trimmedLine) || isMeproQuestion(trimmedLine)) {
       // Save previous question if exists AND has options
       if (currentQuestion && options.length > 0) {
         questions.push({
           id: idCounter++,
-          question: currentQuestion,
+          question: currentQuestion.trim(),
           options: options,
           correctAnswer: correctAnswer
         });
@@ -55,7 +57,8 @@ export const parseMarkdownQuestions = (markdown) => {
       // Append text to current question if we haven't started options yet
       // Ignore separator lines or solution lines if they appear before options
       if (!trimmedLine.startsWith('---') && !trimmedLine.startsWith('**✓')) {
-        currentQuestion += '\n' + trimmedLine;
+        // Use raw line to preserve indentation
+        currentQuestion += '\n' + line;
       }
     }
   });
@@ -64,7 +67,7 @@ export const parseMarkdownQuestions = (markdown) => {
   if (currentQuestion && options.length > 0) {
     questions.push({
       id: idCounter++,
-      question: currentQuestion,
+      question: currentQuestion.trim(),
       options: options,
       correctAnswer: correctAnswer
     });

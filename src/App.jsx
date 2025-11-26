@@ -1,22 +1,247 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import questionsData from './questions.json';
 import { parseMarkdownQuestions } from './utils/markdownParser';
 import { fetchQuestionnaireList, fetchQuestionnaireContent } from './utils/fileFetcher';
+
+// --- Theme Configuration ---
+const themes = {
+  default: {
+    id: 'default',
+    name: 'Obsidiana',
+    bg: 'bg-black',
+    accent: 'teal',
+    accentHex: '#14b8a6',
+    blob1: 'bg-purple-900/20',
+    blob2: 'bg-teal-900/20',
+    text: 'text-white',
+    textMuted: 'text-gray-300', // Brightened from 400
+    border: 'border-white/10',
+    glass: 'bg-white/5',
+    glassHover: 'hover:bg-white/10',
+    activeBg: 'bg-teal-500/20',
+    activeText: 'text-teal-100',
+    activeBorder: 'border-teal-500/50',
+    correctBg: 'bg-green-500/20',
+    correctText: 'text-green-100',
+    incorrectBg: 'bg-red-500/20',
+    incorrectText: 'text-red-100',
+    shadow: 'text-shadow',
+    codeBg: 'bg-gray-900',
+    codeText: 'text-gray-200',
+    gridCurrentBg: 'bg-teal-600',
+    gridCurrentText: 'text-white',
+    gridPastBg: 'bg-gray-800',
+    gridPastText: 'text-gray-300',
+  },
+  turquoise: {
+    id: 'turquoise',
+    name: 'Turquesa',
+    bg: 'bg-teal-950',
+    accent: 'cyan',
+    accentHex: '#06b6d4',
+    blob1: 'bg-teal-600/20',
+    blob2: 'bg-cyan-600/20',
+    text: 'text-teal-50',
+    textMuted: 'text-teal-100', // Brightened from 200
+    border: 'border-teal-200/10',
+    glass: 'bg-teal-500/5',
+    glassHover: 'hover:bg-teal-500/10',
+    activeBg: 'bg-cyan-500/20',
+    activeText: 'text-cyan-50',
+    activeBorder: 'border-cyan-400/50',
+    correctBg: 'bg-green-500/20',
+    correctText: 'text-green-100',
+    incorrectBg: 'bg-red-500/20',
+    incorrectText: 'text-red-100',
+    shadow: 'text-shadow',
+    codeBg: 'bg-teal-900/50',
+    codeText: 'text-teal-100',
+    gridCurrentBg: 'bg-cyan-600',
+    gridCurrentText: 'text-white',
+    gridPastBg: 'bg-teal-800', // Slightly lighter for visibility
+    gridPastText: 'text-teal-100',
+  },
+  white: {
+    id: 'white',
+    name: 'Hielo',
+    bg: 'bg-slate-50',
+    accent: 'blue',
+    accentHex: '#3b82f6',
+    blob1: 'bg-blue-200/50',
+    blob2: 'bg-indigo-200/50',
+    text: 'text-slate-900',
+    textMuted: 'text-slate-600',
+    border: 'border-slate-200',
+    glass: 'bg-white/70',
+    glassHover: 'hover:bg-white/90',
+    activeBg: 'bg-blue-100',
+    activeText: 'text-blue-900',
+    activeBorder: 'border-blue-300',
+    correctBg: 'bg-green-100',
+    correctText: 'text-green-900',
+    incorrectBg: 'bg-red-100',
+    incorrectText: 'text-red-900',
+    shadow: '',
+    codeBg: 'bg-slate-200',
+    codeText: 'text-slate-800',
+    gridCurrentBg: 'bg-blue-600',
+    gridCurrentText: 'text-white',
+    gridPastBg: 'bg-slate-300',
+    gridPastText: 'text-slate-800',
+  }
+};
+
+// --- Helper: Markdown Renderer ---
+const FormattedText = ({ text, theme, className = "" }) => {
+  if (!text) return null;
+
+  // 1. Split by Code Blocks (``` ... ```)
+  const blockParts = text.split(/(```[\s\S]*?```)/g);
+
+  return (
+    <div className={`${className} w-full`}>
+      {blockParts.map((part, index) => {
+        if (part.startsWith('```') && part.endsWith('```')) {
+          // Render Code Block
+          let codeContent = part.slice(3, -3);
+
+          // Check for language identifier (e.g., "java\n")
+          const firstLineMatch = codeContent.match(/^\s*([a-zA-Z0-9]+)\n/);
+          if (firstLineMatch) {
+            codeContent = codeContent.substring(firstLineMatch[0].length);
+          }
+
+          return (
+            <div key={index} className={`my-4 p-4 rounded-lg overflow-x-auto font-mono text-sm leading-relaxed ${theme.codeBg} ${theme.codeText} border ${theme.border} shadow-inner w-full`}>
+              <pre className="whitespace-pre">{codeContent.trim()}</pre>
+            </div>
+          );
+        }
+
+        // 2. Process Inline Code (` ... `) within non-block parts
+        const inlineParts = part.split(/(`[^`]+`)/g);
+
+        return (
+          <span key={index} className="whitespace-pre-wrap">
+            {inlineParts.map((subPart, subIndex) => {
+              if (subPart.startsWith('`') && subPart.endsWith('`')) {
+                // Render Inline Code
+                const inlineContent = subPart.slice(1, -1);
+                return (
+                  <span key={subIndex} className={`font-mono text-sm px-1.5 py-0.5 rounded mx-0.5 ${theme.codeBg} ${theme.codeText} border ${theme.border} align-middle`}>
+                    {inlineContent}
+                  </span>
+                );
+              }
+              // Regular Text
+              return subPart;
+            })}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
+
+// --- UI Components ---
+
+const MagneticButton = ({ children, onClick, className = "", disabled = false, active = false, correct = false, incorrect = false, theme }) => {
+  const btnRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!btnRef.current || disabled) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setSpotlightPos({ x, y });
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Extremely subtle magnetism (0.02)
+    const moveX = (x - centerX) * 0.02;
+    const moveY = (y - centerY) * 0.02;
+
+    setPosition({ x: moveX, y: moveY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setOpacity(0);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  // Dynamic Styles based on Theme and State
+  let baseClasses = `relative rounded-xl border transition-all duration-300 ease-out font-medium backdrop-blur-sm overflow-hidden ${theme.border} `;
+
+  if (disabled) {
+    baseClasses += "cursor-not-allowed opacity-60 ";
+    if (correct) baseClasses += `${theme.correctBg} border-green-400/30 ${theme.correctText} `;
+    else if (incorrect) baseClasses += `${theme.incorrectBg} border-red-400/30 ${theme.incorrectText} `;
+    else baseClasses += `${theme.glass} ${theme.textMuted} `;
+  } else {
+    if (active) baseClasses += `${theme.activeBg} ${theme.activeBorder} ${theme.activeText} shadow-sm `;
+    else baseClasses += `${theme.glass} ${theme.text} opacity-90 ${theme.glassHover} `;
+  }
+
+  return (
+    <div className="relative group" style={{ perspective: '1000px' }}>
+      <button
+        ref={btnRef}
+        onClick={onClick}
+        disabled={disabled}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${isHovering ? 1.005 : 1})`,
+          transition: isHovering ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        }}
+        className={`${baseClasses} ${className} z-10`}
+      >
+        {/* Spotlight Gradient */}
+        <div
+          className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 rounded-xl"
+          style={{
+            opacity,
+            background: `radial-gradient(300px circle at ${spotlightPos.x}px ${spotlightPos.y}px, ${theme.id === 'white' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)'}, transparent 40%)`,
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 flex items-center w-full">
+          {children}
+        </div>
+      </button>
+    </div>
+  );
+};
+
+// --- Main App ---
 
 function App() {
   const [questions, setQuestions] = useState(questionsData);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
-  const [userAnswers, setUserAnswers] = useState({}); // Store all user answers: { [questionIndex]: optionIndex }
+  const [userAnswers, setUserAnswers] = useState({});
   const [isReviewing, setIsReviewing] = useState(false);
 
   // Config State
   const [instantFeedback, setInstantFeedback] = useState(false);
   const [strictMode, setStrictMode] = useState(true);
-
-  // Track which questions have had their feedback revealed (answered while in Instant Mode)
-  const [feedbackRevealed, setFeedbackRevealed] = useState({}); // { [questionIndex]: boolean }
+  const [feedbackRevealed, setFeedbackRevealed] = useState({});
+  const [currentTheme, setCurrentTheme] = useState('default');
 
   // File management
   const [availableFiles, setAvailableFiles] = useState([]);
@@ -27,9 +252,27 @@ function App() {
   // Grid View State
   const [showGrid, setShowGrid] = useState(false);
 
+  const theme = themes[currentTheme];
+
   useEffect(() => {
     loadFileList();
   }, []);
+
+  useEffect(() => {
+    if (instantFeedback && strictMode) {
+      const newRevealed = { ...feedbackRevealed };
+      let changed = false;
+      Object.keys(userAnswers).forEach(key => {
+        if (!newRevealed[key]) {
+          newRevealed[key] = true;
+          changed = true;
+        }
+      });
+      if (changed) {
+        setFeedbackRevealed(newRevealed);
+      }
+    }
+  }, [instantFeedback, strictMode, userAnswers]);
 
   const loadFileList = async () => {
     const files = await fetchQuestionnaireList();
@@ -56,17 +299,13 @@ function App() {
   const handleAnswerOptionClick = (index) => {
     if (isReviewing) return;
 
-    // If feedback is already revealed for this question AND Strict Mode is ON, it is LOCKED.
-    // This applies regardless of the current mode (Normal or Instant).
     if (feedbackRevealed[currentQuestion] && strictMode) return;
 
-    // Save answer
     setUserAnswers(prev => ({
       ...prev,
       [currentQuestion]: index
     }));
 
-    // If instant feedback is currently enabled, mark this question as revealed immediately
     if (instantFeedback) {
       setFeedbackRevealed(prev => ({
         ...prev,
@@ -117,76 +356,46 @@ function App() {
     setShowGrid(false);
   };
 
-  // Helper to determine option style
-  const getOptionStyle = (index) => {
-    const baseStyle = "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 font-medium flex items-center ";
-    const correctIndex = questions[currentQuestion].correctAnswer;
-    const userSelected = userAnswers[currentQuestion];
-
-    // Feedback is shown if:
-    // 1. We are in Review Mode (end of quiz)
-    // 2. The question has been permanently revealed (feedbackRevealed is true)
-    const isFeedbackShown = isReviewing || feedbackRevealed[currentQuestion];
-
-    if (isFeedbackShown && userSelected !== undefined) {
-      if (index === correctIndex) {
-        return baseStyle + "bg-teal-100 border-teal-500 text-teal-800 font-bold shadow-sm";
-      }
-      if (index === userSelected && index !== correctIndex) {
-        return baseStyle + "bg-red-100 border-red-500 text-red-800 opacity-80";
-      }
-      return baseStyle + "border-gray-100 text-gray-400 opacity-60";
-    }
-
-    // Normal Quiz Mode (Selection only)
-    const isSelected = userSelected === index;
-    if (isSelected) {
-      return baseStyle + "bg-teal-50 border-teal-400 text-teal-700 font-bold shadow-md transform scale-[1.01]";
-    }
-    return baseStyle + "border-gray-100 text-gray-600 hover:bg-teal-50 hover:border-teal-200 hover:shadow-sm";
-  };
-
-  // Helper for grid button style
   const getGridButtonStyle = (index) => {
     const isCurrent = currentQuestion === index;
     const isAnswered = userAnswers[index] !== undefined;
     const isCorrect = isAnswered && userAnswers[index] === questions[index].correctAnswer;
-
     const isFeedbackShown = isReviewing || feedbackRevealed[index];
 
-    let style = "w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center transition-all ";
+    let style = `w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center transition-all duration-300 backdrop-blur-sm ${theme.border} `;
 
     if (isCurrent) {
-      return style + "ring-2 ring-offset-2 ring-teal-500 bg-teal-600 text-white shadow-lg scale-110 z-10";
+      return style + `${theme.gridCurrentBg} ${theme.gridCurrentText} shadow-md scale-110 z-10`;
     }
 
     if (isFeedbackShown) {
       if (isAnswered) {
-        return style + (isCorrect ? "bg-teal-100 text-teal-700 border border-teal-300" : "bg-red-100 text-red-700 border border-red-300");
+        return style + (isCorrect ? `${theme.correctBg} ${theme.correctText} border-green-400/30` : `${theme.incorrectBg} ${theme.incorrectText} border-red-400/30`);
       }
     } else {
       if (isAnswered) {
-        return style + "bg-blue-100 text-blue-700 border border-blue-200";
+        return style + `${theme.gridPastBg} ${theme.gridPastText} border-${theme.accent}-400/20`;
       }
     }
 
-    return style + "bg-gray-100 text-gray-500 hover:bg-gray-200";
+    return style + `${theme.glass} ${theme.textMuted} ${theme.glassHover}`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-500 flex items-center justify-center p-4 font-sans relative overflow-hidden">
+    <div className={`min-h-screen ${theme.bg} flex items-center justify-center p-4 font-sans relative overflow-hidden transition-colors duration-700`}>
 
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-300/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+      {/* Animated Background Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className={`absolute top-[-10%] left-[-10%] w-[60%] h-[60%] ${theme.blob1} rounded-full blur-[150px] animate-float transition-colors duration-700`} style={{ animationDuration: '15s' }}></div>
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] ${theme.blob2} rounded-full blur-[150px] animate-float transition-colors duration-700`} style={{ animationDuration: '18s', animationDelay: '2s' }}></div>
+      </div>
 
       {/* Menu Button */}
       <button
         onClick={() => setIsMenuOpen(true)}
-        className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2.5 rounded-full backdrop-blur-md transition-all shadow-lg border border-white/20 z-10"
-        title="Opciones"
+        className={`absolute top-6 right-6 z-20 p-3 rounded-full ${theme.glass} ${theme.border} backdrop-blur-md transition-all duration-300 hover:scale-110 hover:shadow-lg group`}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${theme.textMuted} group-hover:${theme.text}`}>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -195,11 +404,12 @@ function App() {
 
       {/* Menu Modal */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-end transition-opacity">
-          <div className="bg-white/95 w-full max-w-md h-full p-8 shadow-2xl overflow-y-auto animate-slide-in-right border-l border-white/50">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Opciones</h2>
-              <button onClick={() => setIsMenuOpen(false)} className="text-gray-400 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full">
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
+          <div className={`relative w-full max-w-md h-full ${theme.id === 'white' ? 'bg-white/90' : 'bg-black/90'} backdrop-blur-xl border-l ${theme.border} p-8 shadow-2xl animate-slide-in-right overflow-y-auto`}>
+            <div className="flex justify-between items-center mb-10">
+              <h2 className={`text-3xl font-bold ${theme.text} tracking-tight ${theme.shadow}`}>Opciones</h2>
+              <button onClick={() => setIsMenuOpen(false)} className={`${theme.textMuted} hover:${theme.text} transition-colors p-2 hover:bg-white/10 rounded-full`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -207,38 +417,51 @@ function App() {
               </button>
             </div>
 
+            {/* Theme Selector */}
+            <div className="mb-10">
+              <h3 className={`text-xs font-bold ${theme.textMuted} uppercase tracking-widest mb-6 ml-1`}>Tema</h3>
+              <div className="flex gap-3">
+                {Object.keys(themes).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => setCurrentTheme(key)}
+                    className={`flex-1 p-3 rounded-xl border transition-all duration-300 ${currentTheme === key ? `border-${themes[key].accent}-500 bg-${themes[key].accent}-500/10` : `${theme.border} ${theme.glass}`}`}
+                  >
+                    <div className={`w-6 h-6 rounded-full mx-auto mb-2 border-2 border-white/20`} style={{ background: themes[key].accentHex }}></div>
+                    <div className={`text-xs font-medium text-center ${currentTheme === key ? theme.text : theme.textMuted}`}>{themes[key].name}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Config Section */}
-            <div className="mb-8">
-              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configuración</h3>
+            <div className="mb-10">
+              <h3 className={`text-xs font-bold ${theme.textMuted} uppercase tracking-widest mb-6 ml-1`}>Configuración</h3>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <div className={`${theme.glass} p-4 rounded-2xl flex items-center justify-between group ${theme.glassHover} transition-colors`}>
                   <div>
-                    <div className="font-semibold text-gray-700">Corrección Inmediata</div>
-                    <div className="text-xs text-gray-400 mt-1">Ver respuesta al instante</div>
+                    <div className={`font-semibold ${theme.text}`}>Corrección Inmediata</div>
+                    <div className={`text-xs ${theme.textMuted} mt-1`}>Ver respuesta al instante</div>
                   </div>
                   <button
-                    onClick={() => {
-                      setInstantFeedback(!instantFeedback);
-                    }}
-                    className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out focus:outline-none flex items-center ${instantFeedback ? 'bg-teal-500' : 'bg-gray-300'}`}
+                    onClick={() => setInstantFeedback(!instantFeedback)}
+                    className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${instantFeedback ? `bg-${theme.accent}-500` : 'bg-gray-500/30'}`}
                   >
-                    <span className={`absolute left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out ${instantFeedback ? 'translate-x-6' : 'translate-x-0'}`} />
+                    <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${instantFeedback ? 'translate-x-6' : 'translate-x-0'}`} />
                   </button>
                 </div>
 
                 {instantFeedback && (
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 animate-fade-in">
+                  <div className={`${theme.glass} p-4 rounded-2xl flex items-center justify-between animate-fade-in group ${theme.glassHover} transition-colors`}>
                     <div>
-                      <div className="font-semibold text-gray-700">Modo Estricto</div>
-                      <div className="text-xs text-gray-400 mt-1">Bloquear respuesta tras contestar</div>
+                      <div className={`font-semibold ${theme.text}`}>Modo Estricto</div>
+                      <div className={`text-xs ${theme.textMuted} mt-1`}>Bloquear respuesta tras contestar</div>
                     </div>
                     <button
-                      onClick={() => {
-                        setStrictMode(!strictMode);
-                      }}
-                      className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out focus:outline-none flex items-center ${strictMode ? 'bg-teal-500' : 'bg-gray-300'}`}
+                      onClick={() => setStrictMode(!strictMode)}
+                      className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${strictMode ? `bg-${theme.accent}-500` : 'bg-gray-500/30'}`}
                     >
-                      <span className={`absolute left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out ${strictMode ? 'translate-x-6' : 'translate-x-0'}`} />
+                      <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${strictMode ? 'translate-x-6' : 'translate-x-0'}`} />
                     </button>
                   </div>
                 )}
@@ -246,205 +469,232 @@ function App() {
             </div>
 
             <div className="mb-8">
-              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Cuestionarios</h3>
+              <h3 className={`text-xs font-bold ${theme.textMuted} uppercase tracking-widest mb-6 ml-1`}>Cuestionarios</h3>
               {loading ? (
-                <div className="flex items-center space-x-2 text-teal-600">
-                  <div className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span>Cargando...</span>
+                <div className={`flex items-center space-x-3 text-${theme.accent}-400 p-2`}>
+                  <div className={`w-5 h-5 border-2 border-${theme.accent}-400 border-t-transparent rounded-full animate-spin`}></div>
+                  <span className="text-sm font-medium">Cargando...</span>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <button
+                  <MagneticButton
                     onClick={() => {
                       setQuestions(questionsData);
                       setCurrentFileName('Default (JSON)');
                       restartQuiz();
                       setIsMenuOpen(false);
                     }}
-                    className={`w-full text-left p-4 rounded-xl transition-all duration-200 border ${currentFileName === 'Default (JSON)' ? 'bg-teal-50 border-teal-200 text-teal-700 shadow-sm' : 'border-transparent hover:bg-gray-50 text-gray-600'}`}
+                    active={currentFileName === 'Default (JSON)'}
+                    className="p-4 w-full text-left"
+                    theme={theme}
                   >
-                    <div className="font-semibold">Default (JSON)</div>
-                    <div className="text-xs text-gray-400 mt-1">Preguntas integradas</div>
-                  </button>
+                    <div>
+                      <div className="font-semibold">Default (JSON)</div>
+                      <div className={`text-xs ${theme.textMuted} mt-1`}>Preguntas integradas</div>
+                    </div>
+                  </MagneticButton>
+
                   {availableFiles.map((file, index) => (
-                    <button
+                    <MagneticButton
                       key={index}
                       onClick={() => loadFile(file)}
-                      className={`w-full text-left p-4 rounded-xl transition-all duration-200 border ${currentFileName === file ? 'bg-teal-50 border-teal-200 text-teal-700 shadow-sm' : 'border-transparent hover:bg-gray-50 text-gray-600'}`}
+                      active={currentFileName === file}
+                      className="p-4 w-full text-left"
+                      theme={theme}
                     >
-                      <div className="font-semibold">{file}</div>
-                      <div className="text-xs text-gray-400 mt-1">Archivo Markdown</div>
-                    </button>
+                      <div>
+                        <div className="font-semibold">{file}</div>
+                        <div className={`text-xs ${theme.textMuted} mt-1`}>Archivo Markdown</div>
+                      </div>
+                    </MagneticButton>
                   ))}
-                  {availableFiles.length === 0 && (
-                    <p className="text-sm text-gray-400 italic p-2">No se encontraron archivos .md en /questions/</p>
-                  )}
                 </div>
               )}
-            </div>
-
-            <div className="pt-6 border-t border-gray-100">
-              <button onClick={loadFileList} className="text-teal-600 text-sm font-semibold hover:text-teal-700 flex items-center gap-2 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
-                Refrescar lista
-              </button>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white/95 backdrop-blur-xl w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden p-6 md:p-10 relative border border-white/50">
-        {showScore ? (
-          <div className="text-center py-10 animate-fade-in">
-            <div className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 className="text-4xl font-extrabold text-gray-800 mb-2">¡Completado!</h2>
-            <p className="text-gray-500 mb-8">Has finalizado el cuestionario</p>
-
-            <div className="flex justify-center items-end gap-2 mb-8">
-              <span className="text-6xl font-black text-teal-600">{score}</span>
-              <span className="text-2xl text-gray-400 font-medium mb-2">/ {questions.length}</span>
-            </div>
-
-            <div className="w-full max-w-xs mx-auto bg-gray-100 rounded-full h-3 mb-10 overflow-hidden">
-              <div className="bg-teal-500 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${(score / questions.length) * 100}%` }}></div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button onClick={startReview} className="px-8 py-4 bg-white border-2 border-teal-100 text-teal-700 rounded-2xl hover:bg-teal-50 hover:border-teal-200 transition-all font-bold shadow-sm hover:shadow-md flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                Revisar Respuestas
-              </button>
-              <button onClick={restartQuiz} className="px-8 py-4 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-2xl hover:from-teal-600 hover:to-cyan-700 transition-all font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"></path><path d="M3 3v9h9"></path></svg>
-                Intentar de Nuevo
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="mb-8 flex justify-between items-center">
-              <div className="flex flex-col">
-                <button
-                  onClick={() => setShowGrid(!showGrid)}
-                  className="text-xs font-bold text-teal-600 tracking-wider uppercase mb-1 hover:text-teal-800 flex items-center gap-1"
-                >
-                  Pregunta {currentQuestion + 1} de {questions.length}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${showGrid ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
-                </button>
-                <div className="flex gap-2">
-                  {isReviewing && <span className="text-sm font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-md w-fit">Modo Revisión</span>}
-                  {instantFeedback && !isReviewing && <span className="text-sm font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md w-fit">Corrección Inmediata</span>}
+      {/* Main Card */}
+      <div className="w-full max-w-4xl relative z-10 px-4">
+        <div className={`${theme.id === 'white' ? 'bg-white/60' : 'bg-black/20'} backdrop-blur-lg border ${theme.border} shadow-2xl rounded-3xl p-8 md:p-12 transition-all duration-500`}>
+          {showScore ? (
+            <div className="text-center py-12 animate-fade-in">
+              <div className={`w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-tr from-${theme.accent}-400 to-purple-500 p-[1px] shadow-lg`}>
+                <div className={`w-full h-full rounded-full ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} backdrop-blur-xl flex items-center justify-center`}>
+                  <span className={`text-5xl font-bold ${theme.text}`}>{Math.round((score / questions.length) * 100)}%</span>
                 </div>
               </div>
-              {!isReviewing && !instantFeedback && (
-                <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl font-bold text-sm shadow-sm border border-teal-100">
-                  Puntos: {score}
-                </div>
-              )}
+
+              <h2 className={`text-4xl font-bold ${theme.text} mb-2 ${theme.shadow}`}>¡Completado!</h2>
+              <p className={`${theme.textMuted} mb-10 text-lg`}>Has finalizado el cuestionario</p>
+
+              <div className="flex justify-center items-end gap-3 mb-12">
+                <span className={`text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-${theme.accent}-400 to-purple-400`}>{score}</span>
+                <span className={`text-3xl ${theme.textMuted} font-medium mb-3`}>/ {questions.length}</span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <MagneticButton onClick={startReview} className="px-8 py-4 justify-center" theme={theme}>
+                  <span className="font-bold text-lg">Revisar Respuestas</span>
+                </MagneticButton>
+                <MagneticButton onClick={restartQuiz} className="px-8 py-4 justify-center" theme={theme}>
+                  <span className="font-bold text-lg">Intentar de Nuevo</span>
+                </MagneticButton>
+              </div>
             </div>
-
-            {/* Question Grid */}
-            {showGrid && (
-              <div className="mb-8 p-4 bg-gray-50 rounded-2xl border border-gray-100 animate-fade-in max-h-60 overflow-y-auto">
-                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Navegación de Preguntas</h3>
-                <div className="flex flex-wrap gap-2">
-                  {questions.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setCurrentQuestion(index);
-                        setShowGrid(false);
-                      }}
-                      className={getGridButtonStyle(index)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-tight whitespace-pre-wrap">{questions[currentQuestion].question}</h2>
-
-            {!isReviewing && !showGrid && (
-              <div className="w-full bg-gray-100 h-2 mb-10 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-teal-400 to-cyan-500 h-full transition-all duration-500 ease-out" style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}></div>
-              </div>
-            )}
-
-            <div className="space-y-4 mb-10">
-              {questions[currentQuestion].options.map((option, index) => {
-                const isFeedbackShown = feedbackRevealed[currentQuestion];
-                return (
+          ) : (
+            <>
+              {/* Header */}
+              <div className="mb-10 flex justify-between items-start">
+                <div className="flex flex-col gap-2">
                   <button
-                    key={index}
-                    onClick={() => handleAnswerOptionClick(index)}
-                    disabled={isReviewing || (isFeedbackShown && strictMode)}
-                    className={getOptionStyle(index)}
+                    onClick={() => setShowGrid(!showGrid)}
+                    className={`flex items-center gap-2 text-sm font-bold text-${theme.accent}-400 tracking-widest uppercase hover:text-${theme.accent}-300 transition-colors`}
                   >
-                    <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-4 text-sm font-bold transition-colors ${userAnswers[currentQuestion] === index ? 'bg-teal-500 border-teal-500 text-white' : 'bg-white border-gray-200 text-gray-500'}`}>
-                      {String.fromCharCode(65 + index)}
+                    <span className={theme.text}>
+                      Pregunta {currentQuestion + 1} / {questions.length}
                     </span>
-                    <span className="text-lg">{option}</span>
-
-                    {/* Icons for review mode or instant feedback */}
-                    {(isReviewing || (isFeedbackShown && userAnswers[currentQuestion] !== undefined)) && index === questions[currentQuestion].correctAnswer && (
-                      <svg className="w-6 h-6 ml-auto text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    )}
-                    {(isReviewing || (isFeedbackShown && userAnswers[currentQuestion] !== undefined)) && userAnswers[currentQuestion] === index && index !== questions[currentQuestion].correctAnswer && (
-                      <svg className="w-6 h-6 ml-auto text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                    )}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${showGrid ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
                   </button>
-                );
-              })}
-            </div>
+                  <div className="flex gap-2">
+                    {isReviewing && <span className="text-xs font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded-md">Modo Revisión</span>}
+                    {instantFeedback && !isReviewing && <span className="text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded-md">Corrección Inmediata</span>}
+                  </div>
+                </div>
+                {!isReviewing && !instantFeedback && (
+                  <div className={`${theme.glass} px-4 py-2 rounded-xl font-bold ${theme.textMuted} shadow-inner`}>
+                    Puntos: {score}
+                  </div>
+                )}
+              </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6 border-t border-gray-100">
-              <button
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestion === 0}
-                className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${currentQuestion === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-                Anterior
-              </button>
-
-              {isReviewing ? (
-                currentQuestion === questions.length - 1 ? (
-                  <button
-                    onClick={() => setShowScore(true)}
-                    className="px-8 py-3 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg hover:shadow-teal-500/30 flex items-center gap-2"
-                  >
-                    Finalizar Revisión
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleNextQuestion}
-                    className="px-8 py-3 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg hover:shadow-teal-500/30 flex items-center gap-2"
-                  >
-                    Siguiente
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                  </button>
-                )
-              ) : (
-                <button
-                  onClick={handleNextQuestion}
-                  disabled={userAnswers[currentQuestion] === undefined}
-                  className={`px-8 py-3 rounded-xl font-bold transition-all shadow-lg flex items-center gap-2 ${userAnswers[currentQuestion] === undefined ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none' : 'bg-teal-600 text-white hover:bg-teal-700 hover:shadow-teal-500/30'}`}
-                >
-                  {currentQuestion === questions.length - 1 ? 'Ver Resultados' : 'Siguiente'}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-                </button>
+              {/* Grid */}
+              {showGrid && (
+                <div className={`mb-8 p-6 ${theme.id === 'white' ? 'bg-white/50' : 'bg-black/40'} rounded-2xl border ${theme.border} animate-fade-in max-h-60 overflow-y-auto custom-scrollbar`}>
+                  <div className="flex flex-wrap gap-3">
+                    {questions.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setCurrentQuestion(index);
+                          setShowGrid(false);
+                        }}
+                        className={getGridButtonStyle(index)}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
-            </div>
-          </>
-        )}
+
+              {/* Question */}
+              <h2 className={`text-2xl md:text-3xl font-bold ${theme.text} mb-10 leading-relaxed ${theme.shadow}`}>
+                <FormattedText text={questions[currentQuestion].question} theme={theme} />
+              </h2>
+
+              {/* Progress Bar */}
+              {!isReviewing && !showGrid && (
+                <div className={`w-full ${theme.glass} h-1 mb-12 rounded-full overflow-hidden`}>
+                  <div className={`bg-gradient-to-r from-${theme.accent}-400 to-purple-500 h-full transition-all duration-700 ease-out shadow-lg`} style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}></div>
+                </div>
+              )}
+
+              {/* Options */}
+              <div className="space-y-4 mb-12">
+                {questions[currentQuestion].options.map((option, index) => {
+                  const isFeedbackShown = isReviewing || feedbackRevealed[currentQuestion];
+                  const userSelected = userAnswers[currentQuestion];
+                  const isCorrect = index === questions[currentQuestion].correctAnswer;
+                  const isSelected = userSelected === index;
+
+                  // Determine status for styling
+                  let status = 'default';
+                  if (isFeedbackShown && userSelected !== undefined) {
+                    if (isCorrect) status = 'correct';
+                    else if (isSelected) status = 'incorrect';
+                  } else if (isSelected) {
+                    status = 'active';
+                  }
+
+                  return (
+                    <MagneticButton
+                      key={index}
+                      onClick={() => handleAnswerOptionClick(index)}
+                      disabled={isReviewing || (isFeedbackShown && strictMode)}
+                      active={status === 'active'}
+                      correct={status === 'correct'}
+                      incorrect={status === 'incorrect'}
+                      theme={theme}
+                      className="p-5 w-full text-left group"
+                    >
+                      <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border mr-5 text-sm font-bold transition-all duration-300 ${status === 'active' ? `${theme.activeBg} ${theme.activeText} ${theme.activeBorder}` :
+                          status === 'correct' ? 'bg-green-500 text-white border-green-400' :
+                            status === 'incorrect' ? 'bg-red-500 text-white border-red-400' :
+                              `${theme.glass} ${theme.border} ${theme.textMuted} group-hover:${theme.text}`
+                        }`}>
+                        {String.fromCharCode(65 + index)}
+                      </span>
+                      <span className="text-lg leading-snug">
+                        <FormattedText text={option} theme={theme} />
+                      </span>
+
+                      {status === 'correct' && (
+                        <svg className="w-6 h-6 ml-auto text-green-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                      )}
+                      {status === 'incorrect' && (
+                        <svg className="w-6 h-6 ml-auto text-red-400 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                      )}
+                    </MagneticButton>
+                  );
+                })}
+              </div>
+
+              {/* Navigation */}
+              <div className={`flex justify-between pt-8 border-t ${theme.border}`}>
+                <button
+                  onClick={handlePreviousQuestion}
+                  disabled={currentQuestion === 0}
+                  className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${currentQuestion === 0 ? 'opacity-30 cursor-not-allowed' : `${theme.textMuted} hover:${theme.text} hover:bg-white/5`}`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                  Anterior
+                </button>
+
+                {isReviewing ? (
+                  currentQuestion === questions.length - 1 ? (
+                    <MagneticButton onClick={() => setShowScore(true)} className={`px-8 py-3 bg-${theme.accent}-500/20 border-${theme.accent}-500/30 text-${theme.accent}-100 hover:bg-${theme.accent}-500/30`} theme={theme}>
+                      <span className="flex items-center gap-2">
+                        Finalizar Revisión
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                      </span>
+                    </MagneticButton>
+                  ) : (
+                    <MagneticButton onClick={handleNextQuestion} className="px-8 py-3" theme={theme}>
+                      <span className="flex items-center gap-2">
+                        Siguiente
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                      </span>
+                    </MagneticButton>
+                  )
+                ) : (
+                  <MagneticButton
+                    onClick={handleNextQuestion}
+                    disabled={userAnswers[currentQuestion] === undefined}
+                    className={`px-8 py-3 ${userAnswers[currentQuestion] === undefined ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    theme={theme}
+                  >
+                    <span className="flex items-center gap-2">
+                      {currentQuestion === questions.length - 1 ? 'Ver Resultados' : 'Siguiente'}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                    </span>
+                  </MagneticButton>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
