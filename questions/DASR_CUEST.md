@@ -1075,12 +1075,12 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 
 
 - [ ] a. La opción -l (--login) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
-- [ ] b. No funcionará correctamente si no está o está dañado el fichero /etc/sudoers.
+- [x] b. No funcionará correctamente si no está o está dañado el fichero /etc/sudoers.
 - [ ] c. La opción -c (--command) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
 - [ ] d. Las opciones -m o -p hacen que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
-- [x] e. La opción -s (--shell) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
+- [ ] e. La opción -s (--shell) hace que se mantengan todas las variables del usuario sin que se redefinan las variables con los datos del nuevo usuario.
 
-**✓ Solución: e)**
+**✓ Solución: b)**
 
 ---
 
