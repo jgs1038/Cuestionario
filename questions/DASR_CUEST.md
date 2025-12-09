@@ -935,13 +935,13 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 **Apartado: 10. En cuanto a la evolución de internet**
 
 
-- [x] a. Vint Cerf, fue el creador de IP (protocolo para la interconexión de redes de paquetes) junto con Robert Khan en 1974. El PC aparece a principios de los años 1980 de la mano de IBM. Ambos elementos resultaron ser fundamentales para la expansión exponencial de los ordenadores en Internet.
+- [ ] a. Vint Cerf, fue el creador de IP (protocolo para la interconexión de redes de paquetes) junto con Robert Khan en 1974. El PC aparece a principios de los años 1980 de la mano de IBM. Ambos elementos resultaron ser fundamentales para la expansión exponencial de los ordenadores en Internet.
 - [ ] b. Internet nació con la idea de no llegar jamás a alcanzar más de 128 ordenadores conectados.
-- [ ] c. Todas las otras respuestas son correctas.
+- [x] c. Todas las otras respuestas son correctas.
 - [ ] d. La primera red (ARPANET) apareció en 1969 en la Universidad de UCLA de la mano de la empresa BBN.
 - [ ] e. La Universidad de Berkeley incluyó en su Sistema Operativo Unix, el protocolo TCP-IP desarrollado por la empresa BBN.
 
-**✓ Solución: a)**
+**✓ Solución: c)**
 
 ---
 
