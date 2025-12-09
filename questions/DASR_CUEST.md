@@ -1533,12 +1533,12 @@ El fichero "/usr/sbin/showmount" muestra información en un servidor NFS según 
 **Hay 7 traps definidas en la versión SNMPv1: coldStart, warmStart, linkDown, linkUp, authenticationFailure, egpNeighborLoss, enterpriseSpecific**
 
 - [ ] a. No hay 7 sino 8 traps para la versión SNMPv1. De hecho en esa definición hay varios errores, unas no están bien definidos, otras sobran y otras faltan.
-- [x] b. Todas las otras respuestas son correctas.
+- [ ] b. Todas las otras respuestas son correctas.
 - [ ] c. No es correcto, entre otras cosas porque la trap "egpNeighborLoss" no existe. Hay que recordar que EGP no es el único protocolo utilizado para la búsqueda de rutas.
 - [ ] d. No es correcto, entre otras cosas porque la trap "linkDown" se envía cuando se recuperan la totalidad de los enlaces de conexión, cuando uno o varios de estos han caído, y no cuando ha fallado uno de los enlaces de comunicaciones del agente. Esto se debe a que si el enlace caído es aquel por el que se manda la información al gestor, no podría funcionar. A su vez "linkUp" se envía cuando se resetean los enlaces por un apagado ordenado de los enlaces.
-- [ ] e. Ninguna de las otras respuestas es correcta.
+- [x] e. Ninguna de las otras respuestas es correcta.
 
-**✓ Solución: b)** *(Nota: Esta respuesta parece incorrecta según el análisis, pero es la solución indicada)*
+**✓ Solución: e)**
 
 ---
 
