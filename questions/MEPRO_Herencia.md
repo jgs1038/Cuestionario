@@ -1,4 +1,4 @@
-# Examen Java POO - Soluciones
+# Cuestionario de Herencia MEPRO
 
 **1. El modificador `protected` permite el acceso a:**
 

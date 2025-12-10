@@ -1,4 +1,4 @@
-# Cuestionario de Genericidad en Java - Corregido
+# Cuestionario de Genericidad MEPRO
 
 **1. ¿Por qué al leer de `List<? super String>` solo podemos asignar el resultado a `Object`?**
 
